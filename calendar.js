@@ -362,38 +362,22 @@ export var calendar = {
             parseInt('0x'+_table.substr(20,5)).toString(),
             parseInt('0x'+_table.substr(25,5)).toString()
         ];
-        var _calday = [
-            _info[0].substr(0,1),
-            _info[0].substr(1,2),
-            _info[0].substr(3,1),
-            _info[0].substr(4,2),
-
-            _info[1].substr(0,1),
-            _info[1].substr(1,2),
-            _info[1].substr(3,1),
-            _info[1].substr(4,2),
-
-            _info[2].substr(0,1),
-            _info[2].substr(1,2),
-            _info[2].substr(3,1),
-            _info[2].substr(4,2),
-
-            _info[3].substr(0,1),
-            _info[3].substr(1,2),
-            _info[3].substr(3,1),
-            _info[3].substr(4,2),
-
-            _info[4].substr(0,1),
-            _info[4].substr(1,2),
-            _info[4].substr(3,1),
-            _info[4].substr(4,2),
-
-            _info[5].substr(0,1),
-            _info[5].substr(1,2),
-            _info[5].substr(3,1),
-            _info[5].substr(4,2),
-        ];
-        return parseInt(_calday[n-1]);
+        // bugfix-2021-12-06 使用map优化节气取值方式，根据month值获取当月的两个节气所在日期
+        let SolarTermsMap = {
+            0: [_info[0].substr(0, 1), _info[0].substr(1, 2)],
+            1: [_info[0].substr(3, 1), _info[0].substr(4, 2)],
+            2: [_info[1].substr(0, 1), _info[1].substr(1, 2)],
+            3: [_info[1].substr(3, 1), _info[1].substr(4, 2)],
+            4: [_info[2].substr(0, 1), _info[2].substr(1, 2)],
+            5: [_info[2].substr(3, 1), _info[2].substr(4, 2)],
+            6: [_info[3].substr(0, 1), _info[3].substr(1, 2)],
+            7: [_info[3].substr(3, 1), _info[3].substr(4, 2)],
+            8: [_info[4].substr(0, 1), _info[4].substr(1, 2)],
+            9: [_info[4].substr(3, 1), _info[4].substr(4, 2)],
+            10: [_info[5].substr(0, 1), _info[5].substr(1, 2)],
+            11: [_info[5].substr(3, 1), _info[5].substr(4, 2)]
+        };
+        return SolarTermsMap[n];
     },
 
     /**
@@ -451,10 +435,10 @@ export var calendar = {
       * @return JSON object
       * @eg:console.log(calendar.solar2lunar(1987,11,01));
       */
-    solar2lunar:function (y,m,d) { //参数区间1900.1.31~2100.12.31
-        y = parseInt(y)
-        m = parseInt(m)
-        d = parseInt(d)
+    solar2lunar:function (_y,_m,_d) { //参数区间1900.1.31~2100.12.31
+        y = parseInt(_y)
+        m = parseInt(_m)
+        d = parseInt(_d)
         //年份限定、上限
         if(y<1900 || y>2100) {
             return -1;// undefined转换为数字变为NaN
@@ -467,7 +451,8 @@ export var calendar = {
         if(!y) {
             var objDate = new Date();
         }else {
-            var objDate = new Date(y,parseInt(m)-1,d)
+            // bugfix-2021-12-06 正确获取日期
+            var objDate = new Date(y,parseInt(m),d)
         }
         var i, leap=0, temp=0;
         //修正ymd参数
@@ -538,8 +523,13 @@ export var calendar = {
 
         // 当月的两个节气
         // bugfix-2017-7-24 11:03:38 use lunar Year Param `y` Not `year`
-        var firstNode  = this.getTerm(y,(m*2-1));//返回当月「节」为几日开始
-        var secondNode = this.getTerm(y,(m*2));//返回当月「节」为几日开始
+        // var firstNode  = this.getTerm(y,(m*2-1));//返回当月「节」为几日开始
+        // var secondNode = this.getTerm(y,(m*2));//返回当月「节」为几日开始
+
+        // bugfix-2021-12-06 使用map优化节气取值方式，正确获取节气
+        let termNodeList = this.getTerm(_y, _m);
+        var firstNode  = termNodeList[0]//返回当月「节」为几日开始
+        var secondNode = termNodeList[1]//返回当月「节」为几日开始
 
         // 依据12节气修正干支月
         var gzM        = this.toGanZhi((y-1900)*12+m+11);
