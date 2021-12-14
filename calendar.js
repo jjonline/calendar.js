@@ -95,7 +95,7 @@ export var calendar = {
     /**
      * 农历节日
      */
-    lfestival: {
+    lFestival: {
       '12-30': {title: '除夕'},
       '1-1':   {title: '春节'},
       '1-15':  {title: '元宵节'},
@@ -123,12 +123,12 @@ export var calendar = {
      * 返回默认定义的内容里节日
      */
     getLunarFestival(){
-      return this.lfestival
+      return this.lFestival
     },
 
     /**
-     * 
-     * @param {Object} 按照festival的格式输入数据，设置阳历节日
+     *
+     * @param param {Object} 按照festival的格式输入数据，设置阳历节日
      */
     setFestival(param={}){
       this.festival = param
@@ -136,10 +136,10 @@ export var calendar = {
 
     /**
      * 
-     * @param {Object} 按照lfestival的格式输入数据，设置农历节日
+     * @param param {Object} 按照lFestival的格式输入数据，设置农历节日
      */
     setLunarFestival(param={}){
-      this.lfestival = param
+      this.lFestival = param
     },
 
     /**
@@ -249,19 +249,19 @@ export var calendar = {
 
     /**
       * 返回农历y年一整年的总天数
-      * @param lunar Year
+      * @param y lunar Year
       * @return Number
       * @eg:var count = calendar.lYearDays(1987) ;//count=387
       */
     lYearDays:function(y) {
-        var i, sum = 348;
+        let i, sum = 348;
         for(i=0x8000; i>0x8; i>>=1) { sum += (this.lunarInfo[y-1900] & i)? 1: 0; }
         return(sum+this.leapDays(y));
     },
 
     /**
       * 返回农历y年闰月是哪个月；若y年没有闰月 则返回0
-      * @param lunar Year
+      * @param y lunar Year
       * @return Number (0-12)
       * @eg:var leapMonth = calendar.leapMonth(1987) ;//leapMonth=6
       */
@@ -271,7 +271,7 @@ export var calendar = {
 
     /**
       * 返回农历y年闰月的天数 若该年没有闰月则返回0
-      * @param lunar Year
+      * @param y lunar Year
       * @return Number (0、29、30)
       * @eg:var leapMonthDay = calendar.leapDays(1987) ;//leapMonthDay=29
       */
@@ -284,7 +284,8 @@ export var calendar = {
 
     /**
       * 返回农历y年m月（非闰月）的总天数，计算m为闰月时的天数请使用leapDays方法
-      * @param lunar Year
+      * @param y lunar Year
+      * @param m lunar Month
       * @return Number (-1、29、30)
       * @eg:var MonthDay = calendar.monthDays(1987,9) ;//MonthDay=29
       */
@@ -295,7 +296,8 @@ export var calendar = {
 
     /**
       * 返回公历(!)y年m月的天数
-      * @param solar Year
+      * @param y solar Year
+      * @param m solar Month
       * @return Number (-1、28、29、30、31)
       * @eg:var solarMonthDay = calendar.leapDays(1987) ;//solarMonthDay=30
       */
@@ -346,7 +348,8 @@ export var calendar = {
 
     /**
       * 传入公历(!)y年获得该年第n个节气的公历日期
-      * @param y公历年(1900-2100)；n二十四节气中的第几个节气(1~24)；从n=1(小寒)算起
+      * @param y y公历年(1900-2100)
+      * @param n n二十四节气中的第几个节气(1~24)；从n=1(小寒)算起
       * @return day Number
       * @eg:var _24 = calendar.getTerm(1987,3) ;//_24=4;意即1987年2月4日立春
       */
@@ -398,7 +401,7 @@ export var calendar = {
 
     /**
       * 传入农历数字月份返回汉语通俗表示法
-      * @param lunar month
+      * @param m lunar month
       * @return Cn string
       * @eg:var cnMonth = calendar.toChinaMonth(12) ;//cnMonth='腊月'
       */
@@ -411,7 +414,7 @@ export var calendar = {
 
     /**
       * 传入农历日期数字返回汉字表示法
-      * @param lunar day
+      * @param d lunar day
       * @return Cn string
       * @eg:var cnDay = calendar.toChinaDay(21) ;//cnMonth='廿一'
       */
@@ -445,16 +448,16 @@ export var calendar = {
 
     /**
       * 传入阳历年月日获得详细的公历、农历object信息 <=>JSON
-      * @param y  solar year
-      * @param m  solar month
-      * @param d  solar day
+      * @param yPara  solar year
+      * @param mPara  solar month
+      * @param dPara  solar day
       * @return JSON object
       * @eg:console.log(calendar.solar2lunar(1987,11,01));
       */
-    solar2lunar:function (y,m,d) { //参数区间1900.1.31~2100.12.31
-        y = parseInt(y)
-        m = parseInt(m)
-        d = parseInt(d)
+    solar2lunar:function (yPara,mPara,dPara) { //参数区间1900.1.31~2100.12.31
+        y = parseInt(yPara)
+        m = parseInt(mPara)
+        d = parseInt(dPara)
         //年份限定、上限
         if(y<1900 || y>2100) {
             return -1;// undefined转换为数字变为NaN
@@ -568,7 +571,7 @@ export var calendar = {
         var lunarDate = year+'-'+month+'-'+day
 
         var festival = this.festival
-        var lfestival = this.lfestival
+        var lFestival = this.lFestival
 
         var festivalDate = m+'-'+d
         var lunarFestivalDate = month+'-'+day
@@ -577,7 +580,7 @@ export var calendar = {
           date: solarDate,
           lunarDate: lunarDate,
           festival: festival[festivalDate] ? festival[festivalDate].title : null,
-          lunarFestival: lfestival[lunarFestivalDate] ? lfestival[lunarFestivalDate].title : null,
+          lunarFestival: lFestival[lunarFestivalDate] ? lFestival[lunarFestivalDate].title : null,
           'lYear':year,
           'lMonth':month,
           'lDay':day,
@@ -613,7 +616,7 @@ export var calendar = {
         y = parseInt(y)
         m = parseInt(m)
         d = parseInt(d)
-        var isLeapMonth = !!isLeapMonth;
+        isLeapMonth = !!isLeapMonth;
         var leapOffset  = 0;
         var leapMonth   = this.leapMonth(y);
         var leapDay     = this.leapDays(y);
