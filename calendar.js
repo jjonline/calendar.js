@@ -351,48 +351,20 @@ export var calendar = {
       * @eg:var _24 = calendar.getTerm(1987,3) ;//_24=4;意即1987年2月4日立春
       */
     getTerm:function(y,n) {
-        if(y<1900 || y>2100) {return -1;}
-        if(n<1 || n>24) {return -1;}
+        if( y<1900 || y>2100 || n<1 || n>24) {
+            return -1;
+        }
         var _table = this.sTermInfo[y-1900];
-        var _info = [
-            parseInt('0x'+_table.substr(0,5)).toString() ,
-            parseInt('0x'+_table.substr(5,5)).toString(),
-            parseInt('0x'+_table.substr(10,5)).toString(),
-            parseInt('0x'+_table.substr(15,5)).toString(),
-            parseInt('0x'+_table.substr(20,5)).toString(),
-            parseInt('0x'+_table.substr(25,5)).toString()
-        ];
-        var _calday = [
-            _info[0].substr(0,1),
-            _info[0].substr(1,2),
-            _info[0].substr(3,1),
-            _info[0].substr(4,2),
-
-            _info[1].substr(0,1),
-            _info[1].substr(1,2),
-            _info[1].substr(3,1),
-            _info[1].substr(4,2),
-
-            _info[2].substr(0,1),
-            _info[2].substr(1,2),
-            _info[2].substr(3,1),
-            _info[2].substr(4,2),
-
-            _info[3].substr(0,1),
-            _info[3].substr(1,2),
-            _info[3].substr(3,1),
-            _info[3].substr(4,2),
-
-            _info[4].substr(0,1),
-            _info[4].substr(1,2),
-            _info[4].substr(3,1),
-            _info[4].substr(4,2),
-
-            _info[5].substr(0,1),
-            _info[5].substr(1,2),
-            _info[5].substr(3,1),
-            _info[5].substr(4,2),
-        ];
+        var _calday = []
+        for (let index = 0; index < _table.length; index += 5) {
+            const chunk = parseInt('0x' + _table.substr(index, 5)).toString()
+            _calday.push(
+                chunk[0],
+                chunk.substr(1, 2),
+                chunk[3],
+                chunk.substr(4, 2)
+            )
+        }
         return parseInt(_calday[n-1]);
     },
 
