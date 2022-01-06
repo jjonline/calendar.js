@@ -593,8 +593,16 @@ const calendar = {
         const lFestival = this.lFestival;
 
         const festivalDate = m + '-' + d;
-        const lunarFestivalDate = month + '-' + day;
+        let lunarFestivalDate = month + '-' + day;
 
+        // bugfix https://github.com/jjonline/calendar.js/issues/29
+        // 农历节日修正：农历12月小月则29号除夕，大月则30号除夕
+        // 此处取巧修正：当前为农历12月29号时增加一次判断并且把lunarFestivalDate设置为12-30以正确取得除夕
+        // 天朝农历接入遇闰月过前不过后的原则，此处取农历12月天数不考虑闰月
+        // 农历润12月在本工具支持的200年区间内仅1574年出现
+        if (month === 12 && day === 29 && this.monthDays(year, month) === 29) {
+            lunarFestivalDate = '12-30';
+        }
         return {
             date: solarDate,
             lunarDate: lunarDate,
