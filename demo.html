@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendar Demo Test</title>
+    <script src="calendar.js"></script>
+    <style>
+        body {
+            font-family: 'Microsoft Yahei',"\5FAE\8F6F\96C5\9ED1",serif;
+            color: #555;
+            background-color: #fafafa;
+            position: relative;
+            font-size: 14px;
+            max-width: 800px;
+            margin: 10px auto;
+        }
+        .result {
+            width: 800px;
+            min-height: 410px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 5px;
+            outline: none;
+        }
+        code {
+            padding: 2px 4px;
+            font-size: 90%;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+            margin: 0 3px;
+        }
+    </style>
+</head>
+<body>
+<form id="formDemo">
+    <p>调用<code>calendar.solar2lunar()</code>输出结果如下：</p>
+    <textarea id="result" class="result"></textarea>
+
+    <p>调用<code>calendar.solar2lunar(1987,11,01)</code>输出结果如下：</p>
+    <textarea id="result1" class="result"></textarea>
+
+    <p>调用<code>calendar.lunar2solar(1987, '09', 10)</code>输出结果如下：</p>
+    <textarea id="result2" class="result"></textarea>
+</form>
+</body>
+<script>
+    document.getElementById("result").value = JSON.stringify(calendar.solar2lunar(), null, 4);
+    document.getElementById("result1").value = JSON.stringify(calendar.solar2lunar(1987, 11, 1), null, 4);
+    document.getElementById("result2").value = JSON.stringify(calendar.lunar2solar(1987, '09', 10), null, 4); // 注意这里故意用带前导0的字符串
+</script>
+</html>
