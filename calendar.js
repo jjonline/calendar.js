@@ -437,31 +437,30 @@ const calendar = {
      * @eg:console.log(calendar.solar2lunar(1987,11,01));
      */
     solar2lunar: function (yPara, mPara, dPara) {
-        let y = parseInt(yPara);
-        let m = parseInt(mPara);
-        let d = parseInt(dPara);
-        //年份限定、上限
-        if (y < 1900 || y > 2100) {
-            return -1;// undefined转换为数字变为NaN
+        // 未传参，获得当天
+        const objDate = arguments.length === 0 ? new Date() : new Date(parseInt(yPara), parseInt(mPara) - 1, parseInt(dPara));
+
+        // 修正年份
+        // 假如传入的参数为 (2100, 13, 1)，那么实例化出来的日期就会是 2101 年，这时候下面的计算都可能会错误
+        const y = objDate.getFullYear();
+
+        // 年份限定上限
+        // 如果这个日期对象是无效日期（Invalid Date)，则 y 为 NaN， !y 成立
+        if (!y || y < 1900 || y > 2100) {
+            return -1;
         }
-        //公历传参最下限
+
+        // 修正月，日
+        const m = objDate.getMonth() + 1;
+        const d = objDate.getDate();
+
+        // 公历传参最下限
         if (y === 1900 && m === 1 && d < 31) {
             return -1;
         }
 
-        //未传参  获得当天
-        let objDate;
-        if (!y) {
-            objDate = new Date();
-        } else {
-            objDate = new Date(y, parseInt(m) - 1, d);
-        }
         let i, leap = 0, temp = 0;
-        //修正ymd参数
-        y = objDate.getFullYear();
-        m = objDate.getMonth() + 1;
-        d = objDate.getDate();
-        let offset = (Date.UTC(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()) - Date.UTC(1900, 0, 31)) / 86400000;
+        let offset = (Date.UTC(y, m - 1, d) - Date.UTC(1900, 0, 31)) / 86400000;
         for (i = 1900; i < 2101 && offset > 0; i++) {
             temp = this.lYearDays(i);
             offset -= temp;
