@@ -13,7 +13,7 @@
 const calendar = {
 
     /**
-     * 农历1900-2100的润大小信息表
+     * 农历1900-2100的闰大小信息表
      * @Array Of Property
      * @return Hex
      */
@@ -49,7 +49,8 @@ const calendar = {
 
     /**
      * 天干地支之天干速查表
-     * @Array Of Property trans["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"]
+     * @Array Of Property
+     * @trans["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"]
      * @return Cn string
      */
     Gan: ["\u7532", "\u4e59", "\u4e19", "\u4e01", "\u620a", "\u5df1", "\u5e9a", "\u8f9b", "\u58ec", "\u7678"],
@@ -234,10 +235,10 @@ const calendar = {
     /**
      * 日期转农历称呼速查表
      * @Array Of Property
-     * @trans ['初','十','廿','卅']
+     * @trans ['初','十','廿']
      * @return Cn string
      */
-    nStr2: ["\u521d", "\u5341", "\u5eff", "\u5345"],
+    nStr2: ["\u521d", "\u5341", "\u5eff"],
 
     /**
      * 月份转农历称呼速查表
@@ -323,12 +324,9 @@ const calendar = {
      * @return Cn string
      */
     toGanZhiYear: function (lYear) {
-        var ganKey = (lYear - 3) % 10;
-        var zhiKey = (lYear - 3) % 12;
-        if (ganKey === 0) ganKey = 10;//如果余数为0则为最后一个天干
-        if (zhiKey === 0) zhiKey = 12;//如果余数为0则为最后一个地支
+        var ganKey = (lYear - 3) % 10 || 10;
+        var zhiKey = (lYear - 3) % 12 || 12;
         return this.Gan[ganKey - 1] + this.Zhi[zhiKey - 1];
-
     },
 
     /**
@@ -567,7 +565,7 @@ const calendar = {
         // 农历节日修正：农历12月小月则29号除夕，大月则30号除夕
         // 此处取巧修正：当前为农历12月29号时增加一次判断并且把lunarFestivalDate设置为12-30以正确取得除夕
         // 天朝农历节日遇闰月过前不过后的原则，此处取农历12月天数不考虑闰月
-        // 农历润12月在本工具支持的200年区间内仅1574年出现
+        // 农历闰十二月在本工具支持的200年区间内仅1574年出现
         if (month === 12 && day === 29 && this.monthDays(year, month) === 29) {
             lunarFestivalDate = '12-30';
         }
