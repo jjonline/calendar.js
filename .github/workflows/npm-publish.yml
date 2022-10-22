@@ -19,7 +19,7 @@ jobs:
 
       - name: Publish
         run: |
-          sed -i "s/\"version\".*/\"version\": \"`echo ${{ github.ref_name }} | sed -e "s/^v//"`\"/g" ./package.json
+          sed -i "s/\"version\".*/\"version\": \"`echo ${{ github.ref_name }} | sed -e "s/^v//"`\",/g" ./package.json
           cat ./package.json
           npm publish
         env:
