@@ -9,13 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build And Publish
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+
+      - name: Set up Node Then Publish
+        uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: |
+        run: |
           sed -i "s/\"version\".*/\"version\": \"`echo ${{ github.ref_name }} | sed -e "s/^v//"`\"/g" ./package.json
           npm publish
         env:
