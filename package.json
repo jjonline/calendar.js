@@ -11,12 +11,17 @@
     "url": "git+https://github.com/jjonline/calendar.js.git"
   },
   "keywords": [
-    "calendar"
+    "calendar",
+    "lunar to solar",
+    "solar to lunar"
   ],
   "author": "JeaYang",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/jjonline/calendar.js/issues"
   },
-  "homepage": "https://github.com/jjonline/calendar.js#readme"
+  "homepage": "https://github.com/jjonline/calendar.js#readme",
+  "dependencies": {
+    "calendar-converter": "^2.1.4"
+  }
 }

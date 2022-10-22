@@ -8,6 +8,9 @@
 
 # 使用
 
+* npm包： `npm i js-calendar-converter`
+* link: [https://www.npmjs.com/package/js-calendar-converter](https://www.npmjs.com/package/js-calendar-converter)
+
 代码库附带有`demo.html`简单示例调用文件。
 
 ````
