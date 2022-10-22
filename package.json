@@ -1,5 +1,5 @@
 {
-  "name": "calendar.js",
+  "name": "js-calendar.js",
   "version": "0.0.1",
   "description": "Chinese Lunar Calendar (Luminous Calendar) and Western Yuan Gregorian Calendar Interconversion JavaScript Library",
   "main": "calendar.js",
