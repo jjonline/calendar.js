@@ -20,8 +20,5 @@
   "bugs": {
     "url": "https://github.com/jjonline/calendar.js/issues"
   },
-  "homepage": "https://github.com/jjonline/calendar.js#readme",
-  "dependencies": {
-    "calendar-converter": "^2.1.4"
-  }
+  "homepage": "https://github.com/jjonline/calendar.js#readme"
 }
