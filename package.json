@@ -1,0 +1,22 @@
+{
+  "name": "calendar.js",
+  "version": "0.0.1",
+  "description": "Chinese Lunar Calendar (Luminous Calendar) and Western Yuan Gregorian Calendar Interconversion JavaScript Library",
+  "main": "calendar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjonline/calendar.js.git"
+  },
+  "keywords": [
+    "calendar"
+  ],
+  "author": "JeaYang",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/jjonline/calendar.js/issues"
+  },
+  "homepage": "https://github.com/jjonline/calendar.js#readme"
+}
