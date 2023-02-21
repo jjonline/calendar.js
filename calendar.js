@@ -6,11 +6,12 @@
  * @Time    2016-8-13 Fixed 2033hex、Attribution Annals
  * @Time    2016-9-25 Fixed lunar LeapMonth Param Bug
  * @Time    2017-7-24 Fixed use getTerm Func Param Error.use solar year,NOT lunar year
+ * @Time    2023-2-21 修改了节气显示部分的内容，增加了获取下一个节气的相关代码 
  * @Version 1.0.3
  * @公历转农历：calendar.solar2lunar(1987,11,01); //[you can ignore params of prefix 0]
  * @农历转公历：calendar.lunar2solar(1987,09,10); //[you can ignore params of prefix 0]
  */
-export const calendar = {
+let calendar = {
 
     /**
      * 农历1900-2100的润大小信息表
@@ -540,13 +541,34 @@ export const calendar = {
         //传入的日期的节气与否
         let isTerm = false;
         let Term = null;
-        if (firstNode === d) {
-            isTerm = true;
-            Term = this.solarTerm[m * 2 - 2];
+        let nextTerm = null;
+        let nextTermDate = null;
+        if (d ==  firstNode || d == secondNode) {
+            isTerm = true
         }
-        if (secondNode === d) {
-            isTerm = true;
-            Term = this.solarTerm[m * 2 - 1];
+        if (d < firstNode){
+            Term = this.solarTerm[(m*2-3)>=0?m*2-3:23];
+
+
+            nextTerm = this.solarTerm[m*2-2];
+            nextTermDate = y + '-' + m + '-' + firstNode
+        }
+        if (d >= firstNode  && d < secondNode) {
+            Term = this.solarTerm[m*2 - 2];
+            nextTerm = this.solarTerm[m*2 - 1];
+            nextTermDate = y + '-' + m + '-' + secondNode
+        }
+        if (d >= secondNode) {
+            Term = this.solarTerm[m*2 - 1];
+            if (m == 12) {
+                nextTerm = this.solarTerm[0];
+                nextTermDate = (y+1) + '-' + 1 + '-' + this.getTerm(y+1, 1)
+            } else {
+                nextTerm = this.solarTerm[m*2];
+                nextTermDate = y + '-' + (m+1) + '-' + this.getTerm(y, ((m+1) * 2 - 1))
+            }
+
+
         }
         //日柱 当月一日与 1900/1/1 相差天数
         const dayCyclical = Date.UTC(y, sm, 1, 0, 0, 0, 0) / 86400000 + 25567 + 10;
@@ -594,6 +616,8 @@ export const calendar = {
             'ncWeek': "\u661f\u671f" + cWeek,
             'isTerm': isTerm,
             'Term': Term,
+            'nextTerm':nextTerm,
+            'nextTermDate':nextTermDate,
             'astro': astro
         };
     },
