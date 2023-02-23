@@ -2,6 +2,8 @@
 
 中国农历（阴阳历）和西元阳历即公历互转JavaScript库
 
+**在线示例**: [https://jjonline.github.io/calendar.js/demo.html](https://jjonline.github.io/calendar.js/demo.html)
+
 # 介绍
 
 [https://blog.jjonline.cn/userInterFace/173.html](https://blog.jjonline.cn/userInterFace/173.html)
