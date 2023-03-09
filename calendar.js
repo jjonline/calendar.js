@@ -664,3 +664,5 @@ const calendar = {
         return this.solar2lunar(cY, cM, cD);
     }
 };
+
+export default calendar;
