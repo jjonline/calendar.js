@@ -1,4 +1,4 @@
-(function () {
+var calendar = (function (exports) {
   'use strict';
 
   var lunarInfo = [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
@@ -669,6 +669,11 @@
     }
   };
 
-  return calendar;
+  exports.default = calendar;
 
-})();
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+  return exports;
+
+})({});
+//# sourceMappingURL=js-calendar-converter.js.map
