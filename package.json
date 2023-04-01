@@ -2,9 +2,11 @@
   "name": "js-calendar-converter",
   "version": "0.0.1",
   "description": "Chinese Lunar Calendar (Luminous Calendar) and Western Yuan Gregorian Calendar Interconversion JavaScript Library",
-  "main": "calendar.js",
+  "main": "dist/js-calendar-converter.cjs",
+  "module": "dist/js-calendar-converter.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx rollup -c rollup.config.mjs"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/jjonline/calendar.js/issues"
   },
-  "homepage": "https://github.com/jjonline/calendar.js#readme"
+  "homepage": "https://github.com/jjonline/calendar.js#readme",
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.3",
+    "rollup": "^3.19.0",
+    "rollup-plugin-filesize": "^10.0.0"
+  }
 }
