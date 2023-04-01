@@ -14,6 +14,10 @@ export default {
       file: `./dist/${libraryName}.mjs`,
       format: "esm",
     },
+    {
+      file: `./dist/${libraryName}.js`,
+      format: "iife",
+    },
   ],
   plugins: [
     babel({
