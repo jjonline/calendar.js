@@ -18,7 +18,7 @@ export default {
       file: `./dist/${libraryName}.js`,
       format: "iife",
       name: 'calendar',
-      exports: "named",
+      exports: "default",  //"auto" | "default"| "named"| "none"
       sourcemap: true,
     },
   ],

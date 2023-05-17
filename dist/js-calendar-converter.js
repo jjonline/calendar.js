@@ -1,4 +1,4 @@
-var calendar = (function (exports) {
+var calendar = (function () {
   'use strict';
 
   var lunarInfo = [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
@@ -162,6 +162,7 @@ var calendar = (function (exports) {
    * @公历转农历：calendar.solar2lunar(1987,11,01); //[you can ignore params of prefix 0]
    * @农历转公历：calendar.lunar2solar(1987,09,10); //[you can ignore params of prefix 0]
    */
+
   var calendar = {
     /**
      * 农历1900-2100的润大小信息表
@@ -669,11 +670,7 @@ var calendar = (function (exports) {
     }
   };
 
-  exports.default = calendar;
+  return calendar;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
-
-  return exports;
-
-})({});
+})();
 //# sourceMappingURL=js-calendar-converter.js.map
