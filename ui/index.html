@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="./favicon.png?v=1.0.1" type="image/png">
+	<link rel="shortcut icon" href="./favicon.png?v=1.0.1" type="image/png">
+	<link rel="bookmark" href="./favicon.png?v=1.0.1" type="image/png">
+	<title>Calendar UI Example</title>
+
+	<!-- build:js -->
+	<script src="./js/calendar-ui.js"></script>
+	<!-- endbuild -->
+
+	<script src="./compent/beautify.js"></script>
+	<script src="./compent/beautify-css.js"></script>
+	<script src="./compent/beautify-html.js"></script>
+
+	<style type="text/css">
+		body {
+            background-color: #fafafa;
+		}
+
+		.box {
+			font-size: 12px;
+			width: 100%;
+			max-width: 500px;
+			border: 1px solid darkgrey;
+			margin: 0px auto;
+		}
+
+		.example{
+			width: 100%;
+			max-width: 600px;
+			margin: 10px auto;
+		}
+
+		.example textarea {
+			border: 1px solid #fafafa;
+            background-color: #fff;
+			width: 100%;
+            min-height: 300px;
+            outline: none;
+        }
+
+		.test {
+			color: lightgrey;
+			display: block;
+			position: absolute;
+			text-align: right;
+		}
+	</style>
+</head>
+
+<body>
+	<style type="text/css">
+		/*自定义日历样式,当为js加载缺省样式,须注意加载顺序,不能写到head中*/
+		/* .calendarhead .todayLabel {
+			color: #4f3ca0;
+		} */
+	</style>
+	<div id="calendarDeaulfPanel" class="box">
+	</div>
+	<div id="calendarCustomPanel" class="box"></div>
+
+	<div class="example">
+		默认css样式
+		<textarea id="cssCode"></textarea>
+		js示例代码
+		<textarea id="jsCode"></textarea>
+	</div>
+
+	<script id="exampleJsCode">
+		let calendarView = CalendarUI;
+		calendarView.setOptions({
+			drawValidDay: false,  /*显示不是本月的天*/
+			drawHeaderNav: true,  /*显示导航标题*/
+			drawCalendarTitle: true,  /*显示日历标题*/
+			fixRowsBool: true,    /*是否显示固定的行数,只显示当月天数时无效*/
+			autoSelectToday: true, /*是否自动选择今天*/
+			viewAutoSelectDay: -1, /*当前显示没有选择时自动选择那一天, 0为不选择, 负数为倒数第几天*/
+			enabelJsLoadStyle: true, /*是否js加载缺省样式,自定义样式文件时,该选项应为false*/
+			calendarStyle: "default", /*样式类别*/
+			useSimpleDayView: false, /*使用简单的天显示*/
+		});
+
+
+		calendarView.onMonthDayTagTextEvent = function (date) {
+			return parseInt(Math.random() * 100);
+		}
+		calendarView.onMonthDaySelectEvent = function (date) {
+			console.log("select:", date.toDateString());
+		}
+
+		//设置选择日期
+		calendarView.setSelectDate(new Date()); 
+
+		//自定义节日
+		let festivalSetting = calendarView.getFestival()
+		festivalSetting.clearSolar(true);
+		festivalSetting.addSolar((new Date().getMonth() +1) + "-2", "生日");
+
+		calendarView.view("calendarCustomPanel");
+		console.log(calendarView.getSelectDate().toDateString());
+		console.log(calendarView.solar2lunar());
+	</script>
+	<script>
+		var defView = calendarView.createNewUI();
+		defView.view("calendarDeaulfPanel");
+		var jsContent = document.getElementById("exampleJsCode").innerText;
+		jsContent = js_beautify(jsContent, {
+			indent_size: 4,
+			space_in_empty_paren: true,
+		});
+
+		var cssContent = calendarView.defaultStyle;
+		cssContent = css_beautify(cssContent, {
+			indent_size: 4,
+			space_in_empty_paren: true,
+		});
+
+		document.getElementById("cssCode").innerHTML = cssContent;
+		document.getElementById("jsCode").innerHTML = jsContent;
+	</script>
+</body>
+
+</html>
