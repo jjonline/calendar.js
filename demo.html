@@ -56,7 +56,7 @@
     <p>调用<code>calendar.lunar2solar(1987, '09', 10)</code>输出结果如下：</p>
     <textarea id="result2" class="result"></textarea>
 
-    <p><a href="./ui/index.html" target="_blank">详例</a>调用<code>calendar.createUI("ui-div")</code>输出结果如下：</p>
+    <p><a href="./ui/index.html" target="_blank">详例</a>调用<code>calendar.UI.createNewUI("ui-div")</code>输出结果如下：</p>
     <div id="ui-div" class="ui"></div>
 
 </form>
@@ -66,6 +66,6 @@
     document.getElementById("result1").value = JSON.stringify(calendar.solar2lunar(1987, 11, 1), null, 4);
     document.getElementById("result2").value = JSON.stringify(calendar.lunar2solar(1987, '09', 10), null, 4); // 注意这里故意用带前导0的字符串
 
-    calendar.createUI("ui-div");
+    calendar.UI.createNewUI("ui-div", {});
 </script>
 </html>

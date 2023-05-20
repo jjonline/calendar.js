@@ -1,14 +1,15 @@
 import {TCalendarFestival} from './calendar-festival';
+import calendar from "./index";
 
 class TCalendarWapper {
     constructor(jsname) {
         var _self = this;
         var _calendarFestival = new TCalendarFestival('');
-        var _calendar;
+        var _calendar = calendar;
 
-        this.setCalendar = function(value){
-            _calendar = value;
-        }
+        // this.setCalendar = function(value){
+        //     _calendar = value;
+        // }
 
         this.getCalendar = function(){
             return _calendar;

@@ -65,9 +65,9 @@ class TCalendarUI {
         this.getFestival = function(){
            return _calendarObj.getFestival();
         }
-        this.setCalendar = function(value){
-            _calendarObj.setCalendar(value);
-        }
+        // this.setCalendar = function(value){
+        //     _calendarObj.setCalendar(value);
+        // }
         this.getCalendar = function() {
             return _calendarObj.getCalendar();
         }
@@ -188,7 +188,7 @@ class TCalendarUI {
         };
 
         this.createNewUI = function (dest, options) {
-            return TCalendarUI.createCalendarUI(this.getCalendar(), dest, options);
+            return TCalendarUI.createCalendarUI(dest, options, this.getCalendar());
         };
 
         function refreshHeader() {
@@ -427,9 +427,8 @@ class TCalendarUI {
         this._init();
     }
 
-    static createCalendarUI(calendar, dest, options) {
+    static createCalendarUI(dest, options) {
         let obj = new TCalendarUI("");
-        obj.setCalendar(calendar);
         
         if (options) {
             obj.setOptions(options);

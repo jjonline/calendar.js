@@ -1,4 +1,4 @@
-var CalendarUI = (function () {
+var Calendar = (function () {
   'use strict';
 
   function _typeof(obj) {
@@ -243,7 +243,7 @@ var CalendarUI = (function () {
       var festivalDate = m + '-' + d;
       var lastDayDate;
       if (mdays) {
-        //当月只有29天
+        //当月只有29天时,对有设置为第30天的日期进行特殊处理 
         if (mdays === 29) {
           if (d === 29) {
             lastDayDate = m + "-30";
@@ -353,465 +353,6 @@ var CalendarUI = (function () {
     }
     loadDefaultFestival(this);
   });
-
-  var TCalendarWapper = /*#__PURE__*/_createClass(function TCalendarWapper(jsname) {
-    _classCallCheck(this, TCalendarWapper);
-    var _calendarFestival = new TCalendarFestival('');
-    var _calendar;
-    this.setCalendar = function (value) {
-      _calendar = value;
-    };
-    this.getCalendar = function () {
-      return _calendar;
-    };
-    this.getFestival = function () {
-      return _calendarFestival;
-    };
-    this.solar2lunar = function solar2lunar(y, m, d) {
-      var result = _calendar.solar2lunar(y, m, d);
-      //console.log(result);
-      return processFestival(result);
-    };
-    this.lunar2solar = function lunar2solar(y, m, d, isLeapMonth) {
-      var result = _calendar.lunar2solar(y, m, d, isLeapMonth);
-      return processFestival(result);
-    };
-    this.format = function (formatText, date) {
-      var dateObj = new Date();
-      if (date) {
-        dateObj = date;
-      }
-      var o = {
-        "y+": dateObj.getFullYear(),
-        "M+": dateObj.getMonth() + 1,
-        "d+": dateObj.getDate(),
-        "h+": dateObj.getHours(),
-        "m+": dateObj.getMinutes(),
-        "s+": dateObj.getSeconds(),
-        "q+": Math.floor((dateObj.getMonth() + 3) / 3),
-        "S": dateObj.getMilliseconds() //millisecond
-      };
-
-      for (var k in o) {
-        var ret = new RegExp('(' + k + ')').exec(formatText);
-        if (ret) {
-          if (/(y+)/.test(formatText)) {
-            formatText = formatText.replace(ret[1], (o[k] + "").substring(4 - ret[1].length));
-          } else {
-            formatText = formatText.replace(ret[1], ret[1].length === 1 ? o[k] : ("00" + o[k]).substring(("" + o[k]).length));
-          }
-        }
-      }
-      return formatText;
-    };
-    function processFestival(data) {
-      data.festival = _calendarFestival.getSolorText(data.cYear, data.cMonth, data.cDay);
-      data.lunarFestival = _calendarFestival.getLunarText(data.lYear, data.lMonth, data.lDay, _calendar.monthDays(data.lYear, data.lMonth));
-      return data;
-    }
-  });
-
-  function createStyleNode(cssText) {
-    var style = document.createElement("style");
-    style.setAttribute("type", "text/css");
-    style.appendChild(document.createTextNode(cssText));
-    return style;
-  }
-  function addHeadStyle(styleText) {
-    var doc = document;
-    var headObj = doc.getElementsByTagName("head")[0];
-    headObj.appendChild(createStyleNode(styleText));
-  }
-  function extend(obj, ext) {
-    var i,
-      l,
-      name,
-      args = arguments,
-      value;
-    for (i = 1, l = args.length; i < l; i++) {
-      ext = args[i];
-      for (name in ext) {
-        if (ext.hasOwnProperty(name)) {
-          value = ext[name];
-          if (typeof value !== 'undefined') {
-            obj[name] = value;
-          }
-        }
-      }
-    }
-    return obj;
-  }
-  var TCalendarUI = /*#__PURE__*/function () {
-    function TCalendarUI(jsname) {
-      _classCallCheck(this, TCalendarUI);
-      var _self = this;
-      var _viewDate; //显示日期
-      var _selectDate = null; //选择日期
-      var _header = document.createElement("div");
-      var _thead = document.createElement("thead");
-      var _tbody = document.createElement("tbody");
-      var _yearMonthTitle;
-      var _otherTitle;
-      var _allTd = [];
-      var _optionData = {
-        drawValidDay: true,
-        /*显示不是本月的天*/
-        drawHeaderNav: true,
-        /*显示导航标题*/
-        drawCalendarTitle: true,
-        /*显示日历标题*/
-        fixRowsBool: false,
-        /*是否显示固定的行数,只显示当月天数时无效*/
-        autoSelectToday: false,
-        /*是否自动选择今天*/
-        viewAutoSelectDay: 0,
-        /*当前显示没有选择时自动选择那一天, 0为不选择, 负数为倒数第几天*/
-        enabelJsLoadStyle: true,
-        /*是否js加载缺省样式,自定义样式文件时,该选项应为false*/
-        calendarStyle: "default",
-        /*样式类别*/
-        useSimpleDayView: false /*使用简单的天显示*/
-      };
-
-      var _calendarObj = new TCalendarWapper("");
-      this.defaultStyle = defaultCalendarCssStyle;
-      this.solar2lunar = _calendarObj.solar2lunar;
-      this.lunar2solar = _calendarObj.lunar2solar;
-      this.getFestival = function () {
-        return _calendarObj.getFestival();
-      };
-      this.setCalendar = function (value) {
-        _calendarObj.setCalendar(value);
-      };
-      this.getCalendar = function () {
-        return _calendarObj.getCalendar();
-      };
-      this.view = function (dest) {
-        var obj;
-        if (_typeof(dest) === "object") {
-          obj = dest;
-        } else {
-          obj = document.getElementById(dest);
-        }
-        if (_optionData.enabelJsLoadStyle) {
-          addHeadStyle(defaultCalendarCssStyle);
-        }
-        if (_optionData.drawHeaderNav) {
-          obj.appendChild(_header);
-        }
-        obj.appendChild(getTableMonth());
-        this.refresh();
-      };
-      this.refresh = function () {
-        refreshMonthData();
-        refreshHeader();
-      };
-      this.onMonthDayTagTextEvent = function (date) {
-        console.log("onMonthDayTagTextEvent:" + date.toDateString());
-        return "";
-      };
-      this.execMonthDayClick = function (millisecond) {
-        // console.log(millisecond);
-        var date = new Date(parseInt(millisecond));
-        if (!_selectDate || _selectDate.getTime() != date.getTime()) {
-          _selectDate = date;
-          this.refreshSwitch(date);
-        }
-        // this.refresh();
-        //this.onMonthDayClickEvent(year, month, day);
-      };
-
-      this.onMonthDaySelectEvent = function (date) {
-        console.log("onMonthDaySelectEvent:" + date.toDateString());
-      };
-      this.setOptions = function (options) {
-        extend(_optionData, options);
-        if (_optionData.autoSelectToday) {
-          if (!_selectDate) {
-            this.setSelectDate(new Date());
-          }
-        }
-      };
-      this.getSelectDate = function () {
-        return _selectDate;
-      };
-      this.getViewDate = function () {
-        return _viewDate;
-      };
-      this.setSelectDate = function (value) {
-        if (value instanceof Date) {
-          _selectDate = new Date(value.getFullYear(), value.getMonth(), value.getDate());
-          this.setViewDate(_selectDate);
-        }
-      };
-      this.setViewDate = function (value) {
-        if (arguments.length < 1) ; else if (value instanceof Date) {
-          _viewDate = new Date(value.getFullYear(), value.getMonth());
-        } else {
-          if (value !== "today") {
-            var year = _viewDate.getFullYear();
-            var month = _viewDate.getMonth();
-            switch (value) {
-              case "y+":
-                year++;
-                break;
-              case "y-":
-                year--;
-                break;
-              case "m+":
-                month++;
-                break;
-              case "m-":
-                month--;
-                break;
-            }
-            _viewDate = new Date(year, month);
-          } else {
-            _viewDate = new Date();
-          }
-        }
-      };
-      this.refreshSwitch = function (value) {
-        this.setViewDate(value);
-        this.refresh();
-      };
-      this.nextMonth = function () {
-        this.refreshSwitch("m+");
-      };
-      this.preMonth = function () {
-        this.refreshSwitch("m-");
-      };
-      this.nextYear = function () {
-        this.refreshSwitch("y+");
-      };
-      this.preYear = function () {
-        this.refreshSwitch("y-");
-      };
-      this.refreshToday = function () {
-        this.refreshSwitch("today");
-      };
-      this.createNewUI = function (dest, options) {
-        return TCalendarUI.createCalendarUI(this.getCalendar(), dest, options);
-      };
-      function refreshHeader() {
-        var year = _viewDate.getFullYear();
-        var month = _viewDate.getMonth() + 1;
-        var lunarObj = _self.solar2lunar(year, month, 1);
-        var lunarStr = "【" + lunarObj.Animal + "】";
-        if (!_optionData.useSimpleDayView) {
-          lunarStr = lunarObj.gzYear + "年 " + lunarObj.gzMonth + "月" + lunarStr;
-        }
-        _otherTitle.innerHTML = lunarStr;
-        _yearMonthTitle.innerHTML = year + "年" + month + "月";
-      }
-      function initHeader() {
-        _header.classList.add("calendarhead");
-        //⮜⮞❰❱◀▶《》↩↪
-        var preyear = document.createElement("span");
-        preyear.innerHTML = "◀";
-        preyear.classList.add("preYear");
-        preyear.classList.add("navLabel");
-        preyear.onclick = function () {
-          _self.preYear();
-        };
-        var nextyear = document.createElement("span");
-        nextyear.innerHTML = "▶";
-        nextyear.classList.add("nextYear");
-        nextyear.classList.add("navLabel");
-        nextyear.onclick = function () {
-          _self.nextYear();
-        };
-        var preMonth = document.createElement("span");
-        preMonth.innerHTML = "<";
-        preMonth.classList.add("preMonth");
-        preMonth.classList.add("navLabel");
-        preMonth.onclick = function () {
-          _self.preMonth();
-        };
-        var nextMonth = document.createElement("span");
-        nextMonth.innerHTML = ">";
-        nextMonth.classList.add("nextMonth");
-        nextMonth.classList.add("navLabel");
-        nextMonth.onclick = function () {
-          _self.nextMonth();
-        };
-        _yearMonthTitle = document.createElement("label");
-        _yearMonthTitle.classList.add("yearMonthTitle");
-        _otherTitle = document.createElement("div");
-        _otherTitle.classList.add("yearMonthTitleOther");
-        var today = document.createElement("span");
-        today.innerHTML = "今";
-        today.classList.add("navLabel");
-        today.classList.add("todayLabel");
-        today.onclick = function () {
-          _self.refreshToday();
-        };
-        _header.appendChild(preyear);
-        _header.appendChild(preMonth);
-        _header.appendChild(_yearMonthTitle);
-        _header.appendChild(nextMonth);
-        _header.appendChild(nextyear);
-        _header.appendChild(today);
-        _header.appendChild(_otherTitle);
-      }
-      function getTableMonth() {
-        var tableObj = document.createElement("table");
-        tableObj.classList.add("calendarmonth");
-        tableObj.setAttribute('cellspacing', '0');
-        tableObj.setAttribute('cellpadding', '');
-        if (_optionData.drawCalendarTitle) {
-          tableObj.appendChild(_thead);
-        }
-        tableObj.appendChild(_tbody);
-        return tableObj;
-      }
-      function initMonthUI() {
-        initMonthHead();
-        initMonthBody(6);
-      }
-      function initMonthHead() {
-        var thead = _thead;
-        var headAry = ['日', '一', '二', '三', '四', '五', '六'];
-        var tr = document.createElement("tr");
-        for (var i = 0; i < headAry.length; i++) {
-          var th = document.createElement("th");
-          th.innerHTML = headAry[i];
-          if (i == 6 || i == 0) {
-            th.classList.add("week_day");
-          }
-          tr.appendChild(th);
-        }
-        thead.appendChild(tr);
-        return thead;
-      }
-      function initMonthBody(inum) {
-        _allTd = [];
-        _tbody.innerHTML = "";
-        for (var i = 0; i < inum; i++) {
-          var tr = document.createElement("tr");
-          for (var j = 0; j < 7; j++) {
-            var td = document.createElement("td");
-            td.innerHTML = "";
-            if (j == 6 || j == 0) {
-              td.classList.add("week_day");
-            }
-            _allTd.push(td);
-            tr.appendChild(td);
-          }
-          _tbody.append(tr);
-        }
-      }
-      function refreshMonthData() {
-        // 获取默认日期的年月
-        var year = _viewDate.getFullYear();
-        var month = _viewDate.getMonth() + 1;
-
-        // 获取默认年月的1号是星期几
-        var week = new Date(year, month - 1, 1).getDay();
-        // 获取当前月最后一天的日期, 即可知道该月有多少天
-        var days = new Date(year, month, 0).getDate();
-        var selectday = 0;
-        if (_selectDate && _selectDate.getFullYear() == _viewDate.getFullYear() && _selectDate.getMonth() == _viewDate.getMonth()) {
-          selectday = _selectDate.getDate();
-        } else {
-          selectday = _optionData.viewAutoSelectDay;
-          if (selectday < 0) {
-            selectday = days + selectday + 1;
-          }
-        }
-        if (!_optionData.fixRowsBool || !_optionData.drawValidDay) {
-          initMonthBody((week + days) / 7);
-        }
-
-        // 遍历一遍全部单元格
-        for (var i = 0; i < _allTd.length; i++) {
-          var tdObj = _allTd[i];
-          // 在下一次存放日期前先清除对应单元格
-          tdObj.innerHTML = "";
-          var lunarObj = _self.solar2lunar(year, month, i - week + 1);
-          var tdclassAry = [];
-          tdclassAry.push("common_day");
-          if (i < week) {
-            tdclassAry.push("valid_day");
-            if (!_optionData.drawValidDay) {
-              continue;
-            }
-          } else if (i >= week + days) {
-            tdclassAry.push("valid_day");
-            if (!_optionData.drawValidDay) {
-              continue;
-            }
-          } else ;
-          if (selectday > 0 && selectday == i - week + 1) {
-            _selectDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
-            tdclassAry.push("select_day");
-            _self.onMonthDaySelectEvent(_selectDate);
-          }
-          var lanarStr = lunarObj.IDayCn;
-          var classStr = "";
-          if (lanarStr == "初一") {
-            lanarStr = lunarObj.IMonthCn;
-          }
-          if (lunarObj.festival) {
-            classStr = "festival_day";
-            lanarStr = lunarObj.festival.split(" ")[0];
-          }
-          if (lunarObj.lunarFestival) {
-            classStr = "lunarfestival_day";
-            lanarStr = lunarObj.lunarFestival;
-          }
-          if (lunarObj.isTerm) {
-            classStr = "solarterm_day";
-            lanarStr = lunarObj.Term;
-          }
-          lanarStr = '<div class="lanar_day ' + classStr + '">' + lanarStr + '</div>';
-          if (lunarObj.isToday) {
-            tdObj.classList.add("today_day");
-          }
-          var strAry = [];
-          var curDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
-          var tagStr = _self.onMonthDayTagTextEvent(curDate);
-          if (tagStr && tagStr != "") {
-            strAry.push('<div class="monthday_tag_num">' + tagStr + '</div>');
-          }
-          strAry.push('<div>' + lunarObj.cDay + '</div>');
-          if (!_optionData.useSimpleDayView) {
-            strAry.push(lanarStr);
-          }
-          tdObj.setAttribute("data-date", curDate.getTime());
-          tdObj.innerHTML = '<div class="' + tdclassAry.join(" ") + '">' + strAry.join("") + '</div>';
-          tdObj.style.cssText = "cursor: pointer;";
-          tdObj.onclick = function () {
-            _self.execMonthDayClick(this.getAttribute("data-date"));
-          };
-        }
-      }
-      this._init = function () {
-        if (!_viewDate) {
-          this.setViewDate(new Date());
-        }
-        initHeader();
-        initMonthUI();
-      };
-      this._init();
-    }
-    _createClass(TCalendarUI, null, [{
-      key: "createCalendarUI",
-      value: function createCalendarUI(calendar, dest, options) {
-        var obj = new TCalendarUI();
-        obj.setCalendar(calendar);
-        if (options) {
-          obj.setOptions(options);
-        }
-        if (dest) {
-          obj.view(dest);
-        }
-        return obj;
-      }
-    }]);
-    return TCalendarUI;
-  }();
-  var defaultCalendarCssStyle = "\n    /* \u5BFC\u822A\u680F\u6837\u5F0F */\n    .calendarhead {\n        height: 30px;\n        line-height: 30px;\n        text-align: right;\n        background-color: #fcfcfc;\n        padding: 0 10px;\n    }\n\n    .calendarhead span {\n        cursor: pointer;\n    }\n    .calendarhead .navLabel {\n        color: #a02525;\n    }\n\n    .calendarhead .preYear {\n        padding: 0px;\n    }\n\n    .calendarhead .nextYear {\n        padding: 0px;\n        padding-right: 20px;\n    }\n\n    .calendarhead .preMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .nextMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .yearMonthTitle {\n        padding: 0px 4px;\n    }\n\n    .calendarhead .yearMonthTitleOther {\n        position: relative;\n        float: left;\n    }\n\n    .calendarhead .todayLabel {\n        position: relative;\n        float: right;\n        top: 6px;\n        right: 5px;\n        color:  #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #a02525;\n        border-radius: 100%;\n        width: 16px;\n        height: 16px;\n        line-height: 16px;\n    }\n\n    /* \u8BBE\u7F6E\u8868\u683C\u6837\u5F0F */\n    .calendarmonth {\n        background-color: #fcfcfc;\n        border: 0;\n        padding: 0;\n        margin: 0;\n        border-right: 1px solid #efefef;\n        border-bottom: 1px solid #efefef;\n        width: 100%;\n    }\n\n    .calendarmonth td {\n        /* \u7ED9\u5355\u5143\u683C\u8BBE\u7F6E\u8868\u683C\u7EBF */\n        border-left: 1px solid #efefef;\n        border-top: 1px solid #efefef;\n        text-align: center;\n        width: 14%;\n        font-size: 12px;\n    }\n\n    .calendarmonth th {\n        background-color: #E6F0FA;\n        background-color: #17a;\n        color: #fff;\n        font-size: 14px;\n        height: 35px;\n    }\n\n    .calendarmonth .valid_day {\n        background-color: gainsboro;\n        opacity: 0.4;\n        /* \u964D\u4F4E\u900F\u660E\u5EA6\uFF0C\u589E\u5F3A\u6726\u80E7\u6548\u679C */\n    }\n\n    .calendarmonth .week_day {\n        color: firebrick;\n        /* font-weight: bold; */\n    }\n\n    .calendarmonth .lanar_day {\n        color: black;\n        overflow: hidden;\n        white-space: nowrap;\n        text-overflow: ellipsis;\n    }\n\n    .calendarmonth .festival_day {\n        color: cornflowerblue;\n        font-weight: bold;\n    }\n\n    .calendarmonth .lunarfestival_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .solarterm_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .today_day {\n        background-color: crimson;\n        color: #fff;\n    }\n\n    .calendarmonth .select_day {\n        border: 2px solid crimson;\n    }\n\n    .calendarmonth .common_day {\n        position: relative;\n        padding: 5px;\n    }\n\n    .calendarmonth .monthday_tag_num {\n        position:absolute;\n        float: right;\n        right: 2%;\n        top: 1px;\n        font-size: 70%;\n        color: #fff;\n        background-color: #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #fff;\n        min-width: 14px;\n        height: 14px;\n        line-height: 14px;\n        border-radius: 100%;\n        /* font-weight: bold; */\n        font-style: italic;\n    }\n    ";
 
   var lunarInfo = [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
   //1900-1909
@@ -1387,17 +928,473 @@ var CalendarUI = (function () {
       var cM = calObj.getUTCMonth() + 1;
       var cD = calObj.getUTCDate();
       return this.solar2lunar(cY, cM, cD);
-    },
-    /** */
-    createUI: function createUI(dest, options) {
-      return TCalendarUI.createCalendarUI(this, dest, options);
     }
   };
 
-  var calendarUI = new TCalendarUI('CalendarUI');
-  calendarUI.setCalendar(calendar);
+  var TCalendarWapper = /*#__PURE__*/_createClass(function TCalendarWapper(jsname) {
+    _classCallCheck(this, TCalendarWapper);
+    var _calendarFestival = new TCalendarFestival('');
+    var _calendar = calendar;
 
-  return calendarUI;
+    // this.setCalendar = function(value){
+    //     _calendar = value;
+    // }
+
+    this.getCalendar = function () {
+      return _calendar;
+    };
+    this.getFestival = function () {
+      return _calendarFestival;
+    };
+    this.solar2lunar = function solar2lunar(y, m, d) {
+      var result = _calendar.solar2lunar(y, m, d);
+      //console.log(result);
+      return processFestival(result);
+    };
+    this.lunar2solar = function lunar2solar(y, m, d, isLeapMonth) {
+      var result = _calendar.lunar2solar(y, m, d, isLeapMonth);
+      return processFestival(result);
+    };
+    this.format = function (formatText, date) {
+      var dateObj = new Date();
+      if (date) {
+        dateObj = date;
+      }
+      var o = {
+        "y+": dateObj.getFullYear(),
+        "M+": dateObj.getMonth() + 1,
+        "d+": dateObj.getDate(),
+        "h+": dateObj.getHours(),
+        "m+": dateObj.getMinutes(),
+        "s+": dateObj.getSeconds(),
+        "q+": Math.floor((dateObj.getMonth() + 3) / 3),
+        "S": dateObj.getMilliseconds() //millisecond
+      };
+
+      for (var k in o) {
+        var ret = new RegExp('(' + k + ')').exec(formatText);
+        if (ret) {
+          if (/(y+)/.test(formatText)) {
+            formatText = formatText.replace(ret[1], (o[k] + "").substring(4 - ret[1].length));
+          } else {
+            formatText = formatText.replace(ret[1], ret[1].length === 1 ? o[k] : ("00" + o[k]).substring(("" + o[k]).length));
+          }
+        }
+      }
+      return formatText;
+    };
+    function processFestival(data) {
+      data.festival = _calendarFestival.getSolorText(data.cYear, data.cMonth, data.cDay);
+      data.lunarFestival = _calendarFestival.getLunarText(data.lYear, data.lMonth, data.lDay, _calendar.monthDays(data.lYear, data.lMonth));
+      return data;
+    }
+  });
+
+  function createStyleNode(cssText) {
+    var style = document.createElement("style");
+    style.setAttribute("type", "text/css");
+    style.appendChild(document.createTextNode(cssText));
+    return style;
+  }
+  function addHeadStyle(styleText) {
+    var doc = document;
+    var headObj = doc.getElementsByTagName("head")[0];
+    headObj.appendChild(createStyleNode(styleText));
+  }
+  function extend(obj, ext) {
+    var i,
+      l,
+      name,
+      args = arguments,
+      value;
+    for (i = 1, l = args.length; i < l; i++) {
+      ext = args[i];
+      for (name in ext) {
+        if (ext.hasOwnProperty(name)) {
+          value = ext[name];
+          if (typeof value !== 'undefined') {
+            obj[name] = value;
+          }
+        }
+      }
+    }
+    return obj;
+  }
+  var TCalendarUI = /*#__PURE__*/function () {
+    function TCalendarUI(jsname) {
+      _classCallCheck(this, TCalendarUI);
+      var _self = this;
+      var _viewDate; //显示日期
+      var _selectDate = null; //选择日期
+      var _header = document.createElement("div");
+      var _thead = document.createElement("thead");
+      var _tbody = document.createElement("tbody");
+      var _yearMonthTitle;
+      var _otherTitle;
+      var _allTd = [];
+      var _optionData = {
+        drawValidDay: true,
+        /*显示不是本月的天*/
+        drawHeaderNav: true,
+        /*显示导航标题*/
+        drawCalendarTitle: true,
+        /*显示日历标题*/
+        fixRowsBool: false,
+        /*是否显示固定的行数,只显示当月天数时无效*/
+        autoSelectToday: false,
+        /*是否自动选择今天*/
+        viewAutoSelectDay: 0,
+        /*当前显示没有选择时自动选择那一天, 0为不选择, 负数为倒数第几天*/
+        enabelJsLoadStyle: true,
+        /*是否js加载缺省样式,自定义样式文件时,该选项应为false*/
+        calendarStyle: "default",
+        /*样式类别*/
+        useSimpleDayView: false /*使用简单的天显示*/
+      };
+
+      var _calendarObj = new TCalendarWapper("");
+      this.defaultStyle = defaultCalendarCssStyle;
+      this.solar2lunar = _calendarObj.solar2lunar;
+      this.lunar2solar = _calendarObj.lunar2solar;
+      this.getFestival = function () {
+        return _calendarObj.getFestival();
+      };
+      // this.setCalendar = function(value){
+      //     _calendarObj.setCalendar(value);
+      // }
+      this.getCalendar = function () {
+        return _calendarObj.getCalendar();
+      };
+      this.view = function (dest) {
+        var obj;
+        if (_typeof(dest) === "object") {
+          obj = dest;
+        } else {
+          obj = document.getElementById(dest);
+        }
+        if (_optionData.enabelJsLoadStyle) {
+          addHeadStyle(defaultCalendarCssStyle);
+        }
+        if (_optionData.drawHeaderNav) {
+          obj.appendChild(_header);
+        }
+        obj.appendChild(getTableMonth());
+        this.refresh();
+      };
+      this.refresh = function () {
+        refreshMonthData();
+        refreshHeader();
+      };
+      this.onMonthDayTagTextEvent = function (date) {
+        console.log("onMonthDayTagTextEvent:" + date.toDateString());
+        return "";
+      };
+      this.execMonthDayClick = function (millisecond) {
+        // console.log(millisecond);
+        var date = new Date(parseInt(millisecond));
+        if (!_selectDate || _selectDate.getTime() != date.getTime()) {
+          _selectDate = date;
+          this.refreshSwitch(date);
+        }
+        // this.refresh();
+        //this.onMonthDayClickEvent(year, month, day);
+      };
+
+      this.onMonthDaySelectEvent = function (date) {
+        console.log("onMonthDaySelectEvent:" + date.toDateString());
+      };
+      this.setOptions = function (options) {
+        extend(_optionData, options);
+        if (_optionData.autoSelectToday) {
+          if (!_selectDate) {
+            this.setSelectDate(new Date());
+          }
+        }
+      };
+      this.getSelectDate = function () {
+        return _selectDate;
+      };
+      this.getViewDate = function () {
+        return _viewDate;
+      };
+      this.setSelectDate = function (value) {
+        if (value instanceof Date) {
+          _selectDate = new Date(value.getFullYear(), value.getMonth(), value.getDate());
+          this.setViewDate(_selectDate);
+        }
+      };
+      this.setViewDate = function (value) {
+        if (arguments.length < 1) ; else if (value instanceof Date) {
+          _viewDate = new Date(value.getFullYear(), value.getMonth());
+        } else {
+          if (value !== "today") {
+            var year = _viewDate.getFullYear();
+            var month = _viewDate.getMonth();
+            switch (value) {
+              case "y+":
+                year++;
+                break;
+              case "y-":
+                year--;
+                break;
+              case "m+":
+                month++;
+                break;
+              case "m-":
+                month--;
+                break;
+            }
+            _viewDate = new Date(year, month);
+          } else {
+            _viewDate = new Date();
+          }
+        }
+      };
+      this.refreshSwitch = function (value) {
+        this.setViewDate(value);
+        this.refresh();
+      };
+      this.nextMonth = function () {
+        this.refreshSwitch("m+");
+      };
+      this.preMonth = function () {
+        this.refreshSwitch("m-");
+      };
+      this.nextYear = function () {
+        this.refreshSwitch("y+");
+      };
+      this.preYear = function () {
+        this.refreshSwitch("y-");
+      };
+      this.refreshToday = function () {
+        this.refreshSwitch("today");
+      };
+      this.createNewUI = function (dest, options) {
+        return TCalendarUI.createCalendarUI(dest, options, this.getCalendar());
+      };
+      function refreshHeader() {
+        var year = _viewDate.getFullYear();
+        var month = _viewDate.getMonth() + 1;
+        var lunarObj = _self.solar2lunar(year, month, 1);
+        var lunarStr = "【" + lunarObj.Animal + "】";
+        if (!_optionData.useSimpleDayView) {
+          lunarStr = lunarObj.gzYear + "年 " + lunarObj.gzMonth + "月" + lunarStr;
+        }
+        _otherTitle.innerHTML = lunarStr;
+        _yearMonthTitle.innerHTML = year + "年" + month + "月";
+      }
+      function initHeader() {
+        _header.classList.add("calendarhead");
+        //⮜⮞❰❱◀▶《》↩↪
+        var preyear = document.createElement("span");
+        preyear.innerHTML = "◀";
+        preyear.classList.add("preYear");
+        preyear.classList.add("navLabel");
+        preyear.onclick = function () {
+          _self.preYear();
+        };
+        var nextyear = document.createElement("span");
+        nextyear.innerHTML = "▶";
+        nextyear.classList.add("nextYear");
+        nextyear.classList.add("navLabel");
+        nextyear.onclick = function () {
+          _self.nextYear();
+        };
+        var preMonth = document.createElement("span");
+        preMonth.innerHTML = "<";
+        preMonth.classList.add("preMonth");
+        preMonth.classList.add("navLabel");
+        preMonth.onclick = function () {
+          _self.preMonth();
+        };
+        var nextMonth = document.createElement("span");
+        nextMonth.innerHTML = ">";
+        nextMonth.classList.add("nextMonth");
+        nextMonth.classList.add("navLabel");
+        nextMonth.onclick = function () {
+          _self.nextMonth();
+        };
+        _yearMonthTitle = document.createElement("label");
+        _yearMonthTitle.classList.add("yearMonthTitle");
+        _otherTitle = document.createElement("div");
+        _otherTitle.classList.add("yearMonthTitleOther");
+        var today = document.createElement("span");
+        today.innerHTML = "今";
+        today.classList.add("navLabel");
+        today.classList.add("todayLabel");
+        today.onclick = function () {
+          _self.refreshToday();
+        };
+        _header.appendChild(preyear);
+        _header.appendChild(preMonth);
+        _header.appendChild(_yearMonthTitle);
+        _header.appendChild(nextMonth);
+        _header.appendChild(nextyear);
+        _header.appendChild(today);
+        _header.appendChild(_otherTitle);
+      }
+      function getTableMonth() {
+        var tableObj = document.createElement("table");
+        tableObj.classList.add("calendarmonth");
+        tableObj.setAttribute('cellspacing', '0');
+        tableObj.setAttribute('cellpadding', '');
+        if (_optionData.drawCalendarTitle) {
+          tableObj.appendChild(_thead);
+        }
+        tableObj.appendChild(_tbody);
+        return tableObj;
+      }
+      function initMonthUI() {
+        initMonthHead();
+        initMonthBody(6);
+      }
+      function initMonthHead() {
+        var thead = _thead;
+        var headAry = ['日', '一', '二', '三', '四', '五', '六'];
+        var tr = document.createElement("tr");
+        for (var i = 0; i < headAry.length; i++) {
+          var th = document.createElement("th");
+          th.innerHTML = headAry[i];
+          if (i == 6 || i == 0) {
+            th.classList.add("week_day");
+          }
+          tr.appendChild(th);
+        }
+        thead.appendChild(tr);
+        return thead;
+      }
+      function initMonthBody(inum) {
+        _allTd = [];
+        _tbody.innerHTML = "";
+        for (var i = 0; i < inum; i++) {
+          var tr = document.createElement("tr");
+          for (var j = 0; j < 7; j++) {
+            var td = document.createElement("td");
+            td.innerHTML = "";
+            if (j == 6 || j == 0) {
+              td.classList.add("week_day");
+            }
+            _allTd.push(td);
+            tr.appendChild(td);
+          }
+          _tbody.append(tr);
+        }
+      }
+      function refreshMonthData() {
+        // 获取默认日期的年月
+        var year = _viewDate.getFullYear();
+        var month = _viewDate.getMonth() + 1;
+
+        // 获取默认年月的1号是星期几
+        var week = new Date(year, month - 1, 1).getDay();
+        // 获取当前月最后一天的日期, 即可知道该月有多少天
+        var days = new Date(year, month, 0).getDate();
+        var selectday = 0;
+        if (_selectDate && _selectDate.getFullYear() == _viewDate.getFullYear() && _selectDate.getMonth() == _viewDate.getMonth()) {
+          selectday = _selectDate.getDate();
+        } else {
+          selectday = _optionData.viewAutoSelectDay;
+          if (selectday < 0) {
+            selectday = days + selectday + 1;
+          }
+        }
+        if (!_optionData.fixRowsBool || !_optionData.drawValidDay) {
+          initMonthBody((week + days) / 7);
+        }
+
+        // 遍历一遍全部单元格
+        for (var i = 0; i < _allTd.length; i++) {
+          var tdObj = _allTd[i];
+          // 在下一次存放日期前先清除对应单元格
+          tdObj.innerHTML = "";
+          var lunarObj = _self.solar2lunar(year, month, i - week + 1);
+          var tdclassAry = [];
+          tdclassAry.push("common_day");
+          if (i < week) {
+            tdclassAry.push("valid_day");
+            if (!_optionData.drawValidDay) {
+              continue;
+            }
+          } else if (i >= week + days) {
+            tdclassAry.push("valid_day");
+            if (!_optionData.drawValidDay) {
+              continue;
+            }
+          } else ;
+          if (selectday > 0 && selectday == i - week + 1) {
+            _selectDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
+            tdclassAry.push("select_day");
+            _self.onMonthDaySelectEvent(_selectDate);
+          }
+          var lanarStr = lunarObj.IDayCn;
+          var classStr = "";
+          if (lanarStr == "初一") {
+            lanarStr = lunarObj.IMonthCn;
+          }
+          if (lunarObj.festival) {
+            classStr = "festival_day";
+            lanarStr = lunarObj.festival.split(" ")[0];
+          }
+          if (lunarObj.lunarFestival) {
+            classStr = "lunarfestival_day";
+            lanarStr = lunarObj.lunarFestival;
+          }
+          if (lunarObj.isTerm) {
+            classStr = "solarterm_day";
+            lanarStr = lunarObj.Term;
+          }
+          lanarStr = '<div class="lanar_day ' + classStr + '">' + lanarStr + '</div>';
+          if (lunarObj.isToday) {
+            tdObj.classList.add("today_day");
+          }
+          var strAry = [];
+          var curDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
+          var tagStr = _self.onMonthDayTagTextEvent(curDate);
+          if (tagStr && tagStr != "") {
+            strAry.push('<div class="monthday_tag_num">' + tagStr + '</div>');
+          }
+          strAry.push('<div>' + lunarObj.cDay + '</div>');
+          if (!_optionData.useSimpleDayView) {
+            strAry.push(lanarStr);
+          }
+          tdObj.setAttribute("data-date", curDate.getTime());
+          tdObj.innerHTML = '<div class="' + tdclassAry.join(" ") + '">' + strAry.join("") + '</div>';
+          tdObj.style.cssText = "cursor: pointer;";
+          tdObj.onclick = function () {
+            _self.execMonthDayClick(this.getAttribute("data-date"));
+          };
+        }
+      }
+      this._init = function () {
+        if (!_viewDate) {
+          this.setViewDate(new Date());
+        }
+        initHeader();
+        initMonthUI();
+      };
+      this._init();
+    }
+    _createClass(TCalendarUI, null, [{
+      key: "createCalendarUI",
+      value: function createCalendarUI(dest, options) {
+        var obj = new TCalendarUI();
+        if (options) {
+          obj.setOptions(options);
+        }
+        if (dest) {
+          obj.view(dest);
+        }
+        return obj;
+      }
+    }]);
+    return TCalendarUI;
+  }();
+  var defaultCalendarCssStyle = "\n    /* \u5BFC\u822A\u680F\u6837\u5F0F */\n    .calendarhead {\n        height: 30px;\n        line-height: 30px;\n        text-align: right;\n        background-color: #fcfcfc;\n        padding: 0 10px;\n    }\n\n    .calendarhead span {\n        cursor: pointer;\n    }\n    .calendarhead .navLabel {\n        color: #a02525;\n    }\n\n    .calendarhead .preYear {\n        padding: 0px;\n    }\n\n    .calendarhead .nextYear {\n        padding: 0px;\n        padding-right: 20px;\n    }\n\n    .calendarhead .preMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .nextMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .yearMonthTitle {\n        padding: 0px 4px;\n    }\n\n    .calendarhead .yearMonthTitleOther {\n        position: relative;\n        float: left;\n    }\n\n    .calendarhead .todayLabel {\n        position: relative;\n        float: right;\n        top: 6px;\n        right: 5px;\n        color:  #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #a02525;\n        border-radius: 100%;\n        width: 16px;\n        height: 16px;\n        line-height: 16px;\n    }\n\n    /* \u8BBE\u7F6E\u8868\u683C\u6837\u5F0F */\n    .calendarmonth {\n        background-color: #fcfcfc;\n        border: 0;\n        padding: 0;\n        margin: 0;\n        border-right: 1px solid #efefef;\n        border-bottom: 1px solid #efefef;\n        width: 100%;\n    }\n\n    .calendarmonth td {\n        /* \u7ED9\u5355\u5143\u683C\u8BBE\u7F6E\u8868\u683C\u7EBF */\n        border-left: 1px solid #efefef;\n        border-top: 1px solid #efefef;\n        text-align: center;\n        width: 14%;\n        font-size: 12px;\n    }\n\n    .calendarmonth th {\n        background-color: #E6F0FA;\n        background-color: #17a;\n        color: #fff;\n        font-size: 14px;\n        height: 35px;\n    }\n\n    .calendarmonth .valid_day {\n        background-color: gainsboro;\n        opacity: 0.4;\n        /* \u964D\u4F4E\u900F\u660E\u5EA6\uFF0C\u589E\u5F3A\u6726\u80E7\u6548\u679C */\n    }\n\n    .calendarmonth .week_day {\n        color: firebrick;\n        /* font-weight: bold; */\n    }\n\n    .calendarmonth .lanar_day {\n        color: black;\n        overflow: hidden;\n        white-space: nowrap;\n        text-overflow: ellipsis;\n    }\n\n    .calendarmonth .festival_day {\n        color: cornflowerblue;\n        font-weight: bold;\n    }\n\n    .calendarmonth .lunarfestival_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .solarterm_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .today_day {\n        background-color: crimson;\n        color: #fff;\n    }\n\n    .calendarmonth .select_day {\n        border: 2px solid crimson;\n    }\n\n    .calendarmonth .common_day {\n        position: relative;\n        padding: 5px;\n    }\n\n    .calendarmonth .monthday_tag_num {\n        position:absolute;\n        float: right;\n        right: 2%;\n        top: 1px;\n        font-size: 70%;\n        color: #fff;\n        background-color: #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #fff;\n        min-width: 14px;\n        height: 14px;\n        line-height: 14px;\n        border-radius: 100%;\n        /* font-weight: bold; */\n        font-style: italic;\n    }\n    ";
+
+  var calendarUI = TCalendarUI.createCalendarUI();
+  calendar.UI = calendarUI;
+
+  return calendar;
 
 })();
 //# sourceMappingURL=calendar-ui.js.map

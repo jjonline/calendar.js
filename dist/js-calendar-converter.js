@@ -1,55 +1,51 @@
 var calendar = (function () {
   'use strict';
 
-  var lunarInfo = [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
-  //1900-1909
-  0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
-  //1910-1919
-  0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
-  //1920-1929
-  0x06566, 0x0d4a0, 0x0ea50, 0x16a95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
-  //1930-1939
-  0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
-  //1940-1949
-  0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5b0, 0x14573, 0x052b0, 0x0a9a8, 0x0e950, 0x06aa0,
-  //1950-1959
-  0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0,
-  //1960-1969
-  0x096d0, 0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b6a0, 0x195a6,
-  //1970-1979
-  0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570,
-  //1980-1989
-  0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x05ac0, 0x0ab60, 0x096d5, 0x092e0,
-  //1990-1999
-  0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7, 0x025d0, 0x092d0, 0x0cab5,
-  //2000-2009
-  0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
-  //2010-2019
-  0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530,
-  //2020-2029
-  0x05aa0, 0x076a3, 0x096d0, 0x04afb, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45,
-  //2030-2039
-  0x0b5a0, 0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0,
-  //2040-2049
-  /**Add By JJonline@JJonline.Cn**/
-  0x14b63, 0x09370, 0x049f8, 0x04970, 0x064b0, 0x168a6, 0x0ea50, 0x06b20, 0x1a6c4, 0x0aae0,
-  //2050-2059
-  0x092e0, 0x0d2e3, 0x0c960, 0x0d557, 0x0d4a0, 0x0da50, 0x05d55, 0x056a0, 0x0a6d0, 0x055d4,
-  //2060-2069
-  0x052d0, 0x0a9b8, 0x0a950, 0x0b4a0, 0x0b6a6, 0x0ad50, 0x055a0, 0x0aba4, 0x0a5b0, 0x052b0,
-  //2070-2079
-  0x0b273, 0x06930, 0x07337, 0x06aa0, 0x0ad50, 0x14b55, 0x04b60, 0x0a570, 0x054e4, 0x0d160,
-  //2080-2089
-  0x0e968, 0x0d520, 0x0daa0, 0x16aa6, 0x056d0, 0x04ae0, 0x0a9d4, 0x0a2d0, 0x0d150, 0x0f252,
-  //2090-2099
-  0x0d520]; //2100
+  function _typeof(obj) {
+    "@babel/helpers - typeof";
 
-  var solarMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-  var Gan = ["\u7532", "\u4E59", "\u4E19", "\u4E01", "\u620A", "\u5DF1", "\u5E9A", "\u8F9B", "\u58EC", "\u7678"];
-  var Zhi = ["\u5B50", "\u4E11", "\u5BC5", "\u536F", "\u8FB0", "\u5DF3", "\u5348", "\u672A", "\u7533", "\u9149", "\u620C", "\u4EA5"];
-
-  var ChineseZodiac = ["\u9F20", "\u725B", "\u864E", "\u5154", "\u9F99", "\u86C7", "\u9A6C", "\u7F8A", "\u7334", "\u9E21", "\u72D7", "\u732A"];
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+      return typeof obj;
+    } : function (obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
+  }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
+    }
+  }
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+      writable: false
+    });
+    return Constructor;
+  }
+  function _toPrimitive(input, hint) {
+    if (typeof input !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+      var res = prim.call(input, hint || "default");
+      if (typeof res !== "object") return res;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
+  }
+  function _toPropertyKey(arg) {
+    var key = _toPrimitive(arg, "string");
+    return typeof key === "symbol" ? key : String(key);
+  }
 
   var festival = {
     '1-1': {
@@ -142,59 +138,6 @@ var calendar = (function () {
       title: '南方小年'
     }
   };
-
-  var solarTerm = ["\u5C0F\u5BD2", "\u5927\u5BD2", "\u7ACB\u6625", "\u96E8\u6C34", "\u60CA\u86F0", "\u6625\u5206", "\u6E05\u660E", "\u8C37\u96E8", "\u7ACB\u590F", "\u5C0F\u6EE1", "\u8292\u79CD", "\u590F\u81F3", "\u5C0F\u6691", "\u5927\u6691", "\u7ACB\u79CB", "\u5904\u6691", "\u767D\u9732", "\u79CB\u5206", "\u5BD2\u9732", "\u971C\u964D", "\u7ACB\u51AC", "\u5C0F\u96EA", "\u5927\u96EA", "\u51AC\u81F3"];
-  var sTermInfo = ['9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '9778397bd19801ec9210c965cc920e', '97b6b97bd19801ec95f8c965cc920f', '97bd09801d98082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd197c36c9210c9274c91aa', '97b6b97bd19801ec95f8c965cc920e', '97bd09801d98082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec95f8c965cc920e', '97bcf97c3598082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd07f595b0b6fc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '9778397bd19801ec9210c9274c920e', '97b6b97bd19801ec95f8c965cc920f', '97bd07f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c920e', '97b6b97bd19801ec95f8c965cc920f', '97bd07f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bd07f1487f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c9274c920e', '97bcf7f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c91aa', '97b6b97bd197c36c9210c9274c920e', '97bcf7f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c920e', '97b6b7f0e47f531b0723b0b6fb0722', '7f0e37f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36b0b70c9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0787b0721', '7f0e27f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c91aa', '97b6b7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '977837f0e37f149b0723b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f5307f595b0b0bc920fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '977837f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0723b06bd', '7f07e7f0e37f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e37f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e37f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0723b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0723b06bd', '7f07e7f0e37f14998083b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14898082b0723b02d5', '7f07e7f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e36665b66aa89801e9808297c35', '665f67f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e36665b66a449801e9808297c35', '665f67f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e36665b66a449801e9808297c35', '665f67f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e26665b66a449801e9808297c35', '665f67f0e37f1489801eb072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722'];
-
-  var nStr1 = ["\u65E5", "\u4E00", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03", "\u516B", "\u4E5D", "\u5341"];
-  var nStr2 = ["\u521D", "\u5341", "\u5EFF", "\u5345"];
-  var nStr3 = ["\u6B63", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03", "\u516B", "\u4E5D", "\u5341", "\u51AC", "\u814A"];
-
-  function _typeof(obj) {
-    "@babel/helpers - typeof";
-
-    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-      return typeof obj;
-    } : function (obj) {
-      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, _typeof(obj);
-  }
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
-    }
-  }
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    Object.defineProperty(Constructor, "prototype", {
-      writable: false
-    });
-    return Constructor;
-  }
-  function _toPrimitive(input, hint) {
-    if (typeof input !== "object" || input === null) return input;
-    var prim = input[Symbol.toPrimitive];
-    if (prim !== undefined) {
-      var res = prim.call(input, hint || "default");
-      if (typeof res !== "object") return res;
-      throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return (hint === "string" ? String : Number)(input);
-  }
-  function _toPropertyKey(arg) {
-    var key = _toPrimitive(arg, "string");
-    return typeof key === "symbol" ? key : String(key);
-  }
 
   function loadDefaultFestival(calendarFestival) {
     for (var key in festival) {
@@ -411,464 +354,62 @@ var calendar = (function () {
     loadDefaultFestival(this);
   });
 
-  var TCalendarWapper = /*#__PURE__*/_createClass(function TCalendarWapper(jsname) {
-    _classCallCheck(this, TCalendarWapper);
-    var _calendarFestival = new TCalendarFestival('');
-    var _calendar;
-    this.setCalendar = function (value) {
-      _calendar = value;
-    };
-    this.getCalendar = function () {
-      return _calendar;
-    };
-    this.getFestival = function () {
-      return _calendarFestival;
-    };
-    this.solar2lunar = function solar2lunar(y, m, d) {
-      var result = _calendar.solar2lunar(y, m, d);
-      //console.log(result);
-      return processFestival(result);
-    };
-    this.lunar2solar = function lunar2solar(y, m, d, isLeapMonth) {
-      var result = _calendar.lunar2solar(y, m, d, isLeapMonth);
-      return processFestival(result);
-    };
-    this.format = function (formatText, date) {
-      var dateObj = new Date();
-      if (date) {
-        dateObj = date;
-      }
-      var o = {
-        "y+": dateObj.getFullYear(),
-        "M+": dateObj.getMonth() + 1,
-        "d+": dateObj.getDate(),
-        "h+": dateObj.getHours(),
-        "m+": dateObj.getMinutes(),
-        "s+": dateObj.getSeconds(),
-        "q+": Math.floor((dateObj.getMonth() + 3) / 3),
-        "S": dateObj.getMilliseconds() //millisecond
-      };
+  var lunarInfo = [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
+  //1900-1909
+  0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
+  //1910-1919
+  0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
+  //1920-1929
+  0x06566, 0x0d4a0, 0x0ea50, 0x16a95, 0x05ad0, 0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950,
+  //1930-1939
+  0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0, 0x0d2b2, 0x0a950, 0x0b557,
+  //1940-1949
+  0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5b0, 0x14573, 0x052b0, 0x0a9a8, 0x0e950, 0x06aa0,
+  //1950-1959
+  0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0,
+  //1960-1969
+  0x096d0, 0x04dd5, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b6a0, 0x195a6,
+  //1970-1979
+  0x095b0, 0x049b0, 0x0a974, 0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570,
+  //1980-1989
+  0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50, 0x06b58, 0x05ac0, 0x0ab60, 0x096d5, 0x092e0,
+  //1990-1999
+  0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7, 0x025d0, 0x092d0, 0x0cab5,
+  //2000-2009
+  0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0, 0x0a930,
+  //2010-2019
+  0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530,
+  //2020-2029
+  0x05aa0, 0x076a3, 0x096d0, 0x04afb, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45,
+  //2030-2039
+  0x0b5a0, 0x056d0, 0x055b2, 0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0,
+  //2040-2049
+  /**Add By JJonline@JJonline.Cn**/
+  0x14b63, 0x09370, 0x049f8, 0x04970, 0x064b0, 0x168a6, 0x0ea50, 0x06b20, 0x1a6c4, 0x0aae0,
+  //2050-2059
+  0x092e0, 0x0d2e3, 0x0c960, 0x0d557, 0x0d4a0, 0x0da50, 0x05d55, 0x056a0, 0x0a6d0, 0x055d4,
+  //2060-2069
+  0x052d0, 0x0a9b8, 0x0a950, 0x0b4a0, 0x0b6a6, 0x0ad50, 0x055a0, 0x0aba4, 0x0a5b0, 0x052b0,
+  //2070-2079
+  0x0b273, 0x06930, 0x07337, 0x06aa0, 0x0ad50, 0x14b55, 0x04b60, 0x0a570, 0x054e4, 0x0d160,
+  //2080-2089
+  0x0e968, 0x0d520, 0x0daa0, 0x16aa6, 0x056d0, 0x04ae0, 0x0a9d4, 0x0a2d0, 0x0d150, 0x0f252,
+  //2090-2099
+  0x0d520]; //2100
 
-      for (var k in o) {
-        var ret = new RegExp('(' + k + ')').exec(formatText);
-        if (ret) {
-          if (/(y+)/.test(formatText)) {
-            formatText = formatText.replace(ret[1], (o[k] + "").substring(4 - ret[1].length));
-          } else {
-            formatText = formatText.replace(ret[1], ret[1].length === 1 ? o[k] : ("00" + o[k]).substring(("" + o[k]).length));
-          }
-        }
-      }
-      return formatText;
-    };
-    function processFestival(data) {
-      data.festival = _calendarFestival.getSolorText(data.cYear, data.cMonth, data.cDay);
-      data.lunarFestival = _calendarFestival.getLunarText(data.lYear, data.lMonth, data.lDay, _calendar.monthDays(data.lYear, data.lMonth));
-      return data;
-    }
-  });
+  var solarMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  function createStyleNode(cssText) {
-    var style = document.createElement("style");
-    style.setAttribute("type", "text/css");
-    style.appendChild(document.createTextNode(cssText));
-    return style;
-  }
-  function addHeadStyle(styleText) {
-    var doc = document;
-    var headObj = doc.getElementsByTagName("head")[0];
-    headObj.appendChild(createStyleNode(styleText));
-  }
-  function extend(obj, ext) {
-    var i,
-      l,
-      name,
-      args = arguments,
-      value;
-    for (i = 1, l = args.length; i < l; i++) {
-      ext = args[i];
-      for (name in ext) {
-        if (ext.hasOwnProperty(name)) {
-          value = ext[name];
-          if (typeof value !== 'undefined') {
-            obj[name] = value;
-          }
-        }
-      }
-    }
-    return obj;
-  }
-  var TCalendarUI = /*#__PURE__*/function () {
-    function TCalendarUI(jsname) {
-      _classCallCheck(this, TCalendarUI);
-      var _self = this;
-      var _viewDate; //显示日期
-      var _selectDate = null; //选择日期
-      var _header = document.createElement("div");
-      var _thead = document.createElement("thead");
-      var _tbody = document.createElement("tbody");
-      var _yearMonthTitle;
-      var _otherTitle;
-      var _allTd = [];
-      var _optionData = {
-        drawValidDay: true,
-        /*显示不是本月的天*/
-        drawHeaderNav: true,
-        /*显示导航标题*/
-        drawCalendarTitle: true,
-        /*显示日历标题*/
-        fixRowsBool: false,
-        /*是否显示固定的行数,只显示当月天数时无效*/
-        autoSelectToday: false,
-        /*是否自动选择今天*/
-        viewAutoSelectDay: 0,
-        /*当前显示没有选择时自动选择那一天, 0为不选择, 负数为倒数第几天*/
-        enabelJsLoadStyle: true,
-        /*是否js加载缺省样式,自定义样式文件时,该选项应为false*/
-        calendarStyle: "default",
-        /*样式类别*/
-        useSimpleDayView: false /*使用简单的天显示*/
-      };
+  var Gan = ["\u7532", "\u4E59", "\u4E19", "\u4E01", "\u620A", "\u5DF1", "\u5E9A", "\u8F9B", "\u58EC", "\u7678"];
+  var Zhi = ["\u5B50", "\u4E11", "\u5BC5", "\u536F", "\u8FB0", "\u5DF3", "\u5348", "\u672A", "\u7533", "\u9149", "\u620C", "\u4EA5"];
 
-      var _calendarObj = new TCalendarWapper("");
-      this.defaultStyle = defaultCalendarCssStyle;
-      this.solar2lunar = _calendarObj.solar2lunar;
-      this.lunar2solar = _calendarObj.lunar2solar;
-      this.getFestival = function () {
-        return _calendarObj.getFestival();
-      };
-      this.setCalendar = function (value) {
-        _calendarObj.setCalendar(value);
-      };
-      this.getCalendar = function () {
-        return _calendarObj.getCalendar();
-      };
-      this.view = function (dest) {
-        var obj;
-        if (_typeof(dest) === "object") {
-          obj = dest;
-        } else {
-          obj = document.getElementById(dest);
-        }
-        if (_optionData.enabelJsLoadStyle) {
-          addHeadStyle(defaultCalendarCssStyle);
-        }
-        if (_optionData.drawHeaderNav) {
-          obj.appendChild(_header);
-        }
-        obj.appendChild(getTableMonth());
-        this.refresh();
-      };
-      this.refresh = function () {
-        refreshMonthData();
-        refreshHeader();
-      };
-      this.onMonthDayTagTextEvent = function (date) {
-        console.log("onMonthDayTagTextEvent:" + date.toDateString());
-        return "";
-      };
-      this.execMonthDayClick = function (millisecond) {
-        // console.log(millisecond);
-        var date = new Date(parseInt(millisecond));
-        if (!_selectDate || _selectDate.getTime() != date.getTime()) {
-          _selectDate = date;
-          this.refreshSwitch(date);
-        }
-        // this.refresh();
-        //this.onMonthDayClickEvent(year, month, day);
-      };
+  var ChineseZodiac = ["\u9F20", "\u725B", "\u864E", "\u5154", "\u9F99", "\u86C7", "\u9A6C", "\u7F8A", "\u7334", "\u9E21", "\u72D7", "\u732A"];
 
-      this.onMonthDaySelectEvent = function (date) {
-        console.log("onMonthDaySelectEvent:" + date.toDateString());
-      };
-      this.setOptions = function (options) {
-        extend(_optionData, options);
-        if (_optionData.autoSelectToday) {
-          if (!_selectDate) {
-            this.setSelectDate(new Date());
-          }
-        }
-      };
-      this.getSelectDate = function () {
-        return _selectDate;
-      };
-      this.getViewDate = function () {
-        return _viewDate;
-      };
-      this.setSelectDate = function (value) {
-        if (value instanceof Date) {
-          _selectDate = new Date(value.getFullYear(), value.getMonth(), value.getDate());
-          this.setViewDate(_selectDate);
-        }
-      };
-      this.setViewDate = function (value) {
-        if (arguments.length < 1) ; else if (value instanceof Date) {
-          _viewDate = new Date(value.getFullYear(), value.getMonth());
-        } else {
-          if (value !== "today") {
-            var year = _viewDate.getFullYear();
-            var month = _viewDate.getMonth();
-            switch (value) {
-              case "y+":
-                year++;
-                break;
-              case "y-":
-                year--;
-                break;
-              case "m+":
-                month++;
-                break;
-              case "m-":
-                month--;
-                break;
-            }
-            _viewDate = new Date(year, month);
-          } else {
-            _viewDate = new Date();
-          }
-        }
-      };
-      this.refreshSwitch = function (value) {
-        this.setViewDate(value);
-        this.refresh();
-      };
-      this.nextMonth = function () {
-        this.refreshSwitch("m+");
-      };
-      this.preMonth = function () {
-        this.refreshSwitch("m-");
-      };
-      this.nextYear = function () {
-        this.refreshSwitch("y+");
-      };
-      this.preYear = function () {
-        this.refreshSwitch("y-");
-      };
-      this.refreshToday = function () {
-        this.refreshSwitch("today");
-      };
-      this.createNewUI = function (dest, options) {
-        return TCalendarUI.createCalendarUI(this.getCalendar(), dest, options);
-      };
-      function refreshHeader() {
-        var year = _viewDate.getFullYear();
-        var month = _viewDate.getMonth() + 1;
-        var lunarObj = _self.solar2lunar(year, month, 1);
-        var lunarStr = "【" + lunarObj.Animal + "】";
-        if (!_optionData.useSimpleDayView) {
-          lunarStr = lunarObj.gzYear + "年 " + lunarObj.gzMonth + "月" + lunarStr;
-        }
-        _otherTitle.innerHTML = lunarStr;
-        _yearMonthTitle.innerHTML = year + "年" + month + "月";
-      }
-      function initHeader() {
-        _header.classList.add("calendarhead");
-        //⮜⮞❰❱◀▶《》↩↪
-        var preyear = document.createElement("span");
-        preyear.innerHTML = "◀";
-        preyear.classList.add("preYear");
-        preyear.classList.add("navLabel");
-        preyear.onclick = function () {
-          _self.preYear();
-        };
-        var nextyear = document.createElement("span");
-        nextyear.innerHTML = "▶";
-        nextyear.classList.add("nextYear");
-        nextyear.classList.add("navLabel");
-        nextyear.onclick = function () {
-          _self.nextYear();
-        };
-        var preMonth = document.createElement("span");
-        preMonth.innerHTML = "<";
-        preMonth.classList.add("preMonth");
-        preMonth.classList.add("navLabel");
-        preMonth.onclick = function () {
-          _self.preMonth();
-        };
-        var nextMonth = document.createElement("span");
-        nextMonth.innerHTML = ">";
-        nextMonth.classList.add("nextMonth");
-        nextMonth.classList.add("navLabel");
-        nextMonth.onclick = function () {
-          _self.nextMonth();
-        };
-        _yearMonthTitle = document.createElement("label");
-        _yearMonthTitle.classList.add("yearMonthTitle");
-        _otherTitle = document.createElement("div");
-        _otherTitle.classList.add("yearMonthTitleOther");
-        var today = document.createElement("span");
-        today.innerHTML = "今";
-        today.classList.add("navLabel");
-        today.classList.add("todayLabel");
-        today.onclick = function () {
-          _self.refreshToday();
-        };
-        _header.appendChild(preyear);
-        _header.appendChild(preMonth);
-        _header.appendChild(_yearMonthTitle);
-        _header.appendChild(nextMonth);
-        _header.appendChild(nextyear);
-        _header.appendChild(today);
-        _header.appendChild(_otherTitle);
-      }
-      function getTableMonth() {
-        var tableObj = document.createElement("table");
-        tableObj.classList.add("calendarmonth");
-        tableObj.setAttribute('cellspacing', '0');
-        tableObj.setAttribute('cellpadding', '');
-        if (_optionData.drawCalendarTitle) {
-          tableObj.appendChild(_thead);
-        }
-        tableObj.appendChild(_tbody);
-        return tableObj;
-      }
-      function initMonthUI() {
-        initMonthHead();
-        initMonthBody(6);
-      }
-      function initMonthHead() {
-        var thead = _thead;
-        var headAry = ['日', '一', '二', '三', '四', '五', '六'];
-        var tr = document.createElement("tr");
-        for (var i = 0; i < headAry.length; i++) {
-          var th = document.createElement("th");
-          th.innerHTML = headAry[i];
-          if (i == 6 || i == 0) {
-            th.classList.add("week_day");
-          }
-          tr.appendChild(th);
-        }
-        thead.appendChild(tr);
-        return thead;
-      }
-      function initMonthBody(inum) {
-        _allTd = [];
-        _tbody.innerHTML = "";
-        for (var i = 0; i < inum; i++) {
-          var tr = document.createElement("tr");
-          for (var j = 0; j < 7; j++) {
-            var td = document.createElement("td");
-            td.innerHTML = "";
-            if (j == 6 || j == 0) {
-              td.classList.add("week_day");
-            }
-            _allTd.push(td);
-            tr.appendChild(td);
-          }
-          _tbody.append(tr);
-        }
-      }
-      function refreshMonthData() {
-        // 获取默认日期的年月
-        var year = _viewDate.getFullYear();
-        var month = _viewDate.getMonth() + 1;
+  var solarTerm = ["\u5C0F\u5BD2", "\u5927\u5BD2", "\u7ACB\u6625", "\u96E8\u6C34", "\u60CA\u86F0", "\u6625\u5206", "\u6E05\u660E", "\u8C37\u96E8", "\u7ACB\u590F", "\u5C0F\u6EE1", "\u8292\u79CD", "\u590F\u81F3", "\u5C0F\u6691", "\u5927\u6691", "\u7ACB\u79CB", "\u5904\u6691", "\u767D\u9732", "\u79CB\u5206", "\u5BD2\u9732", "\u971C\u964D", "\u7ACB\u51AC", "\u5C0F\u96EA", "\u5927\u96EA", "\u51AC\u81F3"];
+  var sTermInfo = ['9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd0b06bdb0722c965ce1cfcc920f', 'b027097bd097c36b0b6fc9274c91aa', '9778397bd19801ec9210c965cc920e', '97b6b97bd19801ec95f8c965cc920f', '97bd09801d98082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd197c36c9210c9274c91aa', '97b6b97bd19801ec95f8c965cc920e', '97bd09801d98082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec95f8c965cc920e', '97bcf97c3598082c95f8e1cfcc920f', '97bd097bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c3598082c95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf97c359801ec95f8c965cc920f', '97bd097bd07f595b0b6fc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '9778397bd19801ec9210c9274c920e', '97b6b97bd19801ec95f8c965cc920f', '97bd07f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c920e', '97b6b97bd19801ec95f8c965cc920f', '97bd07f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bd07f1487f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c965cc920e', '97bcf7f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b97bd19801ec9210c9274c920e', '97bcf7f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c91aa', '97b6b97bd197c36c9210c9274c920e', '97bcf7f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '9778397bd097c36c9210c9274c920e', '97b6b7f0e47f531b0723b0b6fb0722', '7f0e37f5307f595b0b0bc920fb0722', '7f0e397bd097c36b0b6fc9210c8dc2', '9778397bd097c36b0b70c9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9274c91aa', '97b6b7f0e47f531b0723b0787b0721', '7f0e27f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c91aa', '97b6b7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '9778397bd097c36b0b6fc9210c8dc2', '977837f0e37f149b0723b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f5307f595b0b0bc920fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '977837f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc9210c8dc2', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd097c35b0b6fc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0787b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0b0bb0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14998082b0723b06bd', '7f07e7f0e37f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e397bd07f595b0b0bc920fb0722', '977837f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f1487f595b0b0bb0b6fb0722', '7f0e37f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e37f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e37f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f1487f531b0b0bb0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0723b06bd', '7f07e7f0e47f149b0723b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14998082b0723b06bd', '7f07e7f0e37f14998083b0787b0721', '7f0e27f0e47f531b0723b0b6fb0722', '7f0e37f0e366aa89801eb072297c35', '7ec967f0e37f14898082b0723b02d5', '7f07e7f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e36665b66aa89801e9808297c35', '665f67f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b0721', '7f07e7f0e47f531b0723b0b6fb0722', '7f0e36665b66a449801e9808297c35', '665f67f0e37f14898082b0723b02d5', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e36665b66a449801e9808297c35', '665f67f0e37f14898082b072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e26665b66a449801e9808297c35', '665f67f0e37f1489801eb072297c35', '7ec967f0e37f14998082b0787b06bd', '7f07e7f0e47f531b0723b0b6fb0721', '7f0e27f1487f531b0b0bb0b6fb0722'];
 
-        // 获取默认年月的1号是星期几
-        var week = new Date(year, month - 1, 1).getDay();
-        // 获取当前月最后一天的日期, 即可知道该月有多少天
-        var days = new Date(year, month, 0).getDate();
-        var selectday = 0;
-        if (_selectDate && _selectDate.getFullYear() == _viewDate.getFullYear() && _selectDate.getMonth() == _viewDate.getMonth()) {
-          selectday = _selectDate.getDate();
-        } else {
-          selectday = _optionData.viewAutoSelectDay;
-          if (selectday < 0) {
-            selectday = days + selectday + 1;
-          }
-        }
-        if (!_optionData.fixRowsBool || !_optionData.drawValidDay) {
-          initMonthBody((week + days) / 7);
-        }
-
-        // 遍历一遍全部单元格
-        for (var i = 0; i < _allTd.length; i++) {
-          var tdObj = _allTd[i];
-          // 在下一次存放日期前先清除对应单元格
-          tdObj.innerHTML = "";
-          var lunarObj = _self.solar2lunar(year, month, i - week + 1);
-          var tdclassAry = [];
-          tdclassAry.push("common_day");
-          if (i < week) {
-            tdclassAry.push("valid_day");
-            if (!_optionData.drawValidDay) {
-              continue;
-            }
-          } else if (i >= week + days) {
-            tdclassAry.push("valid_day");
-            if (!_optionData.drawValidDay) {
-              continue;
-            }
-          } else ;
-          if (selectday > 0 && selectday == i - week + 1) {
-            _selectDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
-            tdclassAry.push("select_day");
-            _self.onMonthDaySelectEvent(_selectDate);
-          }
-          var lanarStr = lunarObj.IDayCn;
-          var classStr = "";
-          if (lanarStr == "初一") {
-            lanarStr = lunarObj.IMonthCn;
-          }
-          if (lunarObj.festival) {
-            classStr = "festival_day";
-            lanarStr = lunarObj.festival.split(" ")[0];
-          }
-          if (lunarObj.lunarFestival) {
-            classStr = "lunarfestival_day";
-            lanarStr = lunarObj.lunarFestival;
-          }
-          if (lunarObj.isTerm) {
-            classStr = "solarterm_day";
-            lanarStr = lunarObj.Term;
-          }
-          lanarStr = '<div class="lanar_day ' + classStr + '">' + lanarStr + '</div>';
-          if (lunarObj.isToday) {
-            tdObj.classList.add("today_day");
-          }
-          var strAry = [];
-          var curDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
-          var tagStr = _self.onMonthDayTagTextEvent(curDate);
-          if (tagStr && tagStr != "") {
-            strAry.push('<div class="monthday_tag_num">' + tagStr + '</div>');
-          }
-          strAry.push('<div>' + lunarObj.cDay + '</div>');
-          if (!_optionData.useSimpleDayView) {
-            strAry.push(lanarStr);
-          }
-          tdObj.setAttribute("data-date", curDate.getTime());
-          tdObj.innerHTML = '<div class="' + tdclassAry.join(" ") + '">' + strAry.join("") + '</div>';
-          tdObj.style.cssText = "cursor: pointer;";
-          tdObj.onclick = function () {
-            _self.execMonthDayClick(this.getAttribute("data-date"));
-          };
-        }
-      }
-      this._init = function () {
-        if (!_viewDate) {
-          this.setViewDate(new Date());
-        }
-        initHeader();
-        initMonthUI();
-      };
-      this._init();
-    }
-    _createClass(TCalendarUI, null, [{
-      key: "createCalendarUI",
-      value: function createCalendarUI(calendar, dest, options) {
-        var obj = new TCalendarUI();
-        obj.setCalendar(calendar);
-        if (options) {
-          obj.setOptions(options);
-        }
-        if (dest) {
-          obj.view(dest);
-        }
-        return obj;
-      }
-    }]);
-    return TCalendarUI;
-  }();
-  var defaultCalendarCssStyle = "\n    /* \u5BFC\u822A\u680F\u6837\u5F0F */\n    .calendarhead {\n        height: 30px;\n        line-height: 30px;\n        text-align: right;\n        background-color: #fcfcfc;\n        padding: 0 10px;\n    }\n\n    .calendarhead span {\n        cursor: pointer;\n    }\n    .calendarhead .navLabel {\n        color: #a02525;\n    }\n\n    .calendarhead .preYear {\n        padding: 0px;\n    }\n\n    .calendarhead .nextYear {\n        padding: 0px;\n        padding-right: 20px;\n    }\n\n    .calendarhead .preMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .nextMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .yearMonthTitle {\n        padding: 0px 4px;\n    }\n\n    .calendarhead .yearMonthTitleOther {\n        position: relative;\n        float: left;\n    }\n\n    .calendarhead .todayLabel {\n        position: relative;\n        float: right;\n        top: 6px;\n        right: 5px;\n        color:  #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #a02525;\n        border-radius: 100%;\n        width: 16px;\n        height: 16px;\n        line-height: 16px;\n    }\n\n    /* \u8BBE\u7F6E\u8868\u683C\u6837\u5F0F */\n    .calendarmonth {\n        background-color: #fcfcfc;\n        border: 0;\n        padding: 0;\n        margin: 0;\n        border-right: 1px solid #efefef;\n        border-bottom: 1px solid #efefef;\n        width: 100%;\n    }\n\n    .calendarmonth td {\n        /* \u7ED9\u5355\u5143\u683C\u8BBE\u7F6E\u8868\u683C\u7EBF */\n        border-left: 1px solid #efefef;\n        border-top: 1px solid #efefef;\n        text-align: center;\n        width: 14%;\n        font-size: 12px;\n    }\n\n    .calendarmonth th {\n        background-color: #E6F0FA;\n        background-color: #17a;\n        color: #fff;\n        font-size: 14px;\n        height: 35px;\n    }\n\n    .calendarmonth .valid_day {\n        background-color: gainsboro;\n        opacity: 0.4;\n        /* \u964D\u4F4E\u900F\u660E\u5EA6\uFF0C\u589E\u5F3A\u6726\u80E7\u6548\u679C */\n    }\n\n    .calendarmonth .week_day {\n        color: firebrick;\n        /* font-weight: bold; */\n    }\n\n    .calendarmonth .lanar_day {\n        color: black;\n        overflow: hidden;\n        white-space: nowrap;\n        text-overflow: ellipsis;\n    }\n\n    .calendarmonth .festival_day {\n        color: cornflowerblue;\n        font-weight: bold;\n    }\n\n    .calendarmonth .lunarfestival_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .solarterm_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .today_day {\n        background-color: crimson;\n        color: #fff;\n    }\n\n    .calendarmonth .select_day {\n        border: 2px solid crimson;\n    }\n\n    .calendarmonth .common_day {\n        position: relative;\n        padding: 5px;\n    }\n\n    .calendarmonth .monthday_tag_num {\n        position:absolute;\n        float: right;\n        right: 2%;\n        top: 1px;\n        font-size: 70%;\n        color: #fff;\n        background-color: #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #fff;\n        min-width: 14px;\n        height: 14px;\n        line-height: 14px;\n        border-radius: 100%;\n        /* font-weight: bold; */\n        font-style: italic;\n    }\n    ";
+  var nStr1 = ["\u65E5", "\u4E00", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03", "\u516B", "\u4E5D", "\u5341"];
+  var nStr2 = ["\u521D", "\u5341", "\u5EFF", "\u5345"];
+  var nStr3 = ["\u6B63", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03", "\u516B", "\u4E5D", "\u5341", "\u51AC", "\u814A"];
 
   /**
    * @1900-2100区间内的公历、农历互转
@@ -1387,12 +928,471 @@ var calendar = (function () {
       var cM = calObj.getUTCMonth() + 1;
       var cD = calObj.getUTCDate();
       return this.solar2lunar(cY, cM, cD);
-    },
-    /** */
-    createUI: function createUI(dest, options) {
-      return TCalendarUI.createCalendarUI(this, dest, options);
     }
   };
+
+  var TCalendarWapper = /*#__PURE__*/_createClass(function TCalendarWapper(jsname) {
+    _classCallCheck(this, TCalendarWapper);
+    var _calendarFestival = new TCalendarFestival('');
+    var _calendar = calendar;
+
+    // this.setCalendar = function(value){
+    //     _calendar = value;
+    // }
+
+    this.getCalendar = function () {
+      return _calendar;
+    };
+    this.getFestival = function () {
+      return _calendarFestival;
+    };
+    this.solar2lunar = function solar2lunar(y, m, d) {
+      var result = _calendar.solar2lunar(y, m, d);
+      //console.log(result);
+      return processFestival(result);
+    };
+    this.lunar2solar = function lunar2solar(y, m, d, isLeapMonth) {
+      var result = _calendar.lunar2solar(y, m, d, isLeapMonth);
+      return processFestival(result);
+    };
+    this.format = function (formatText, date) {
+      var dateObj = new Date();
+      if (date) {
+        dateObj = date;
+      }
+      var o = {
+        "y+": dateObj.getFullYear(),
+        "M+": dateObj.getMonth() + 1,
+        "d+": dateObj.getDate(),
+        "h+": dateObj.getHours(),
+        "m+": dateObj.getMinutes(),
+        "s+": dateObj.getSeconds(),
+        "q+": Math.floor((dateObj.getMonth() + 3) / 3),
+        "S": dateObj.getMilliseconds() //millisecond
+      };
+
+      for (var k in o) {
+        var ret = new RegExp('(' + k + ')').exec(formatText);
+        if (ret) {
+          if (/(y+)/.test(formatText)) {
+            formatText = formatText.replace(ret[1], (o[k] + "").substring(4 - ret[1].length));
+          } else {
+            formatText = formatText.replace(ret[1], ret[1].length === 1 ? o[k] : ("00" + o[k]).substring(("" + o[k]).length));
+          }
+        }
+      }
+      return formatText;
+    };
+    function processFestival(data) {
+      data.festival = _calendarFestival.getSolorText(data.cYear, data.cMonth, data.cDay);
+      data.lunarFestival = _calendarFestival.getLunarText(data.lYear, data.lMonth, data.lDay, _calendar.monthDays(data.lYear, data.lMonth));
+      return data;
+    }
+  });
+
+  function createStyleNode(cssText) {
+    var style = document.createElement("style");
+    style.setAttribute("type", "text/css");
+    style.appendChild(document.createTextNode(cssText));
+    return style;
+  }
+  function addHeadStyle(styleText) {
+    var doc = document;
+    var headObj = doc.getElementsByTagName("head")[0];
+    headObj.appendChild(createStyleNode(styleText));
+  }
+  function extend(obj, ext) {
+    var i,
+      l,
+      name,
+      args = arguments,
+      value;
+    for (i = 1, l = args.length; i < l; i++) {
+      ext = args[i];
+      for (name in ext) {
+        if (ext.hasOwnProperty(name)) {
+          value = ext[name];
+          if (typeof value !== 'undefined') {
+            obj[name] = value;
+          }
+        }
+      }
+    }
+    return obj;
+  }
+  var TCalendarUI = /*#__PURE__*/function () {
+    function TCalendarUI(jsname) {
+      _classCallCheck(this, TCalendarUI);
+      var _self = this;
+      var _viewDate; //显示日期
+      var _selectDate = null; //选择日期
+      var _header = document.createElement("div");
+      var _thead = document.createElement("thead");
+      var _tbody = document.createElement("tbody");
+      var _yearMonthTitle;
+      var _otherTitle;
+      var _allTd = [];
+      var _optionData = {
+        drawValidDay: true,
+        /*显示不是本月的天*/
+        drawHeaderNav: true,
+        /*显示导航标题*/
+        drawCalendarTitle: true,
+        /*显示日历标题*/
+        fixRowsBool: false,
+        /*是否显示固定的行数,只显示当月天数时无效*/
+        autoSelectToday: false,
+        /*是否自动选择今天*/
+        viewAutoSelectDay: 0,
+        /*当前显示没有选择时自动选择那一天, 0为不选择, 负数为倒数第几天*/
+        enabelJsLoadStyle: true,
+        /*是否js加载缺省样式,自定义样式文件时,该选项应为false*/
+        calendarStyle: "default",
+        /*样式类别*/
+        useSimpleDayView: false /*使用简单的天显示*/
+      };
+
+      var _calendarObj = new TCalendarWapper("");
+      this.defaultStyle = defaultCalendarCssStyle;
+      this.solar2lunar = _calendarObj.solar2lunar;
+      this.lunar2solar = _calendarObj.lunar2solar;
+      this.getFestival = function () {
+        return _calendarObj.getFestival();
+      };
+      // this.setCalendar = function(value){
+      //     _calendarObj.setCalendar(value);
+      // }
+      this.getCalendar = function () {
+        return _calendarObj.getCalendar();
+      };
+      this.view = function (dest) {
+        var obj;
+        if (_typeof(dest) === "object") {
+          obj = dest;
+        } else {
+          obj = document.getElementById(dest);
+        }
+        if (_optionData.enabelJsLoadStyle) {
+          addHeadStyle(defaultCalendarCssStyle);
+        }
+        if (_optionData.drawHeaderNav) {
+          obj.appendChild(_header);
+        }
+        obj.appendChild(getTableMonth());
+        this.refresh();
+      };
+      this.refresh = function () {
+        refreshMonthData();
+        refreshHeader();
+      };
+      this.onMonthDayTagTextEvent = function (date) {
+        console.log("onMonthDayTagTextEvent:" + date.toDateString());
+        return "";
+      };
+      this.execMonthDayClick = function (millisecond) {
+        // console.log(millisecond);
+        var date = new Date(parseInt(millisecond));
+        if (!_selectDate || _selectDate.getTime() != date.getTime()) {
+          _selectDate = date;
+          this.refreshSwitch(date);
+        }
+        // this.refresh();
+        //this.onMonthDayClickEvent(year, month, day);
+      };
+
+      this.onMonthDaySelectEvent = function (date) {
+        console.log("onMonthDaySelectEvent:" + date.toDateString());
+      };
+      this.setOptions = function (options) {
+        extend(_optionData, options);
+        if (_optionData.autoSelectToday) {
+          if (!_selectDate) {
+            this.setSelectDate(new Date());
+          }
+        }
+      };
+      this.getSelectDate = function () {
+        return _selectDate;
+      };
+      this.getViewDate = function () {
+        return _viewDate;
+      };
+      this.setSelectDate = function (value) {
+        if (value instanceof Date) {
+          _selectDate = new Date(value.getFullYear(), value.getMonth(), value.getDate());
+          this.setViewDate(_selectDate);
+        }
+      };
+      this.setViewDate = function (value) {
+        if (arguments.length < 1) ; else if (value instanceof Date) {
+          _viewDate = new Date(value.getFullYear(), value.getMonth());
+        } else {
+          if (value !== "today") {
+            var year = _viewDate.getFullYear();
+            var month = _viewDate.getMonth();
+            switch (value) {
+              case "y+":
+                year++;
+                break;
+              case "y-":
+                year--;
+                break;
+              case "m+":
+                month++;
+                break;
+              case "m-":
+                month--;
+                break;
+            }
+            _viewDate = new Date(year, month);
+          } else {
+            _viewDate = new Date();
+          }
+        }
+      };
+      this.refreshSwitch = function (value) {
+        this.setViewDate(value);
+        this.refresh();
+      };
+      this.nextMonth = function () {
+        this.refreshSwitch("m+");
+      };
+      this.preMonth = function () {
+        this.refreshSwitch("m-");
+      };
+      this.nextYear = function () {
+        this.refreshSwitch("y+");
+      };
+      this.preYear = function () {
+        this.refreshSwitch("y-");
+      };
+      this.refreshToday = function () {
+        this.refreshSwitch("today");
+      };
+      this.createNewUI = function (dest, options) {
+        return TCalendarUI.createCalendarUI(dest, options, this.getCalendar());
+      };
+      function refreshHeader() {
+        var year = _viewDate.getFullYear();
+        var month = _viewDate.getMonth() + 1;
+        var lunarObj = _self.solar2lunar(year, month, 1);
+        var lunarStr = "【" + lunarObj.Animal + "】";
+        if (!_optionData.useSimpleDayView) {
+          lunarStr = lunarObj.gzYear + "年 " + lunarObj.gzMonth + "月" + lunarStr;
+        }
+        _otherTitle.innerHTML = lunarStr;
+        _yearMonthTitle.innerHTML = year + "年" + month + "月";
+      }
+      function initHeader() {
+        _header.classList.add("calendarhead");
+        //⮜⮞❰❱◀▶《》↩↪
+        var preyear = document.createElement("span");
+        preyear.innerHTML = "◀";
+        preyear.classList.add("preYear");
+        preyear.classList.add("navLabel");
+        preyear.onclick = function () {
+          _self.preYear();
+        };
+        var nextyear = document.createElement("span");
+        nextyear.innerHTML = "▶";
+        nextyear.classList.add("nextYear");
+        nextyear.classList.add("navLabel");
+        nextyear.onclick = function () {
+          _self.nextYear();
+        };
+        var preMonth = document.createElement("span");
+        preMonth.innerHTML = "<";
+        preMonth.classList.add("preMonth");
+        preMonth.classList.add("navLabel");
+        preMonth.onclick = function () {
+          _self.preMonth();
+        };
+        var nextMonth = document.createElement("span");
+        nextMonth.innerHTML = ">";
+        nextMonth.classList.add("nextMonth");
+        nextMonth.classList.add("navLabel");
+        nextMonth.onclick = function () {
+          _self.nextMonth();
+        };
+        _yearMonthTitle = document.createElement("label");
+        _yearMonthTitle.classList.add("yearMonthTitle");
+        _otherTitle = document.createElement("div");
+        _otherTitle.classList.add("yearMonthTitleOther");
+        var today = document.createElement("span");
+        today.innerHTML = "今";
+        today.classList.add("navLabel");
+        today.classList.add("todayLabel");
+        today.onclick = function () {
+          _self.refreshToday();
+        };
+        _header.appendChild(preyear);
+        _header.appendChild(preMonth);
+        _header.appendChild(_yearMonthTitle);
+        _header.appendChild(nextMonth);
+        _header.appendChild(nextyear);
+        _header.appendChild(today);
+        _header.appendChild(_otherTitle);
+      }
+      function getTableMonth() {
+        var tableObj = document.createElement("table");
+        tableObj.classList.add("calendarmonth");
+        tableObj.setAttribute('cellspacing', '0');
+        tableObj.setAttribute('cellpadding', '');
+        if (_optionData.drawCalendarTitle) {
+          tableObj.appendChild(_thead);
+        }
+        tableObj.appendChild(_tbody);
+        return tableObj;
+      }
+      function initMonthUI() {
+        initMonthHead();
+        initMonthBody(6);
+      }
+      function initMonthHead() {
+        var thead = _thead;
+        var headAry = ['日', '一', '二', '三', '四', '五', '六'];
+        var tr = document.createElement("tr");
+        for (var i = 0; i < headAry.length; i++) {
+          var th = document.createElement("th");
+          th.innerHTML = headAry[i];
+          if (i == 6 || i == 0) {
+            th.classList.add("week_day");
+          }
+          tr.appendChild(th);
+        }
+        thead.appendChild(tr);
+        return thead;
+      }
+      function initMonthBody(inum) {
+        _allTd = [];
+        _tbody.innerHTML = "";
+        for (var i = 0; i < inum; i++) {
+          var tr = document.createElement("tr");
+          for (var j = 0; j < 7; j++) {
+            var td = document.createElement("td");
+            td.innerHTML = "";
+            if (j == 6 || j == 0) {
+              td.classList.add("week_day");
+            }
+            _allTd.push(td);
+            tr.appendChild(td);
+          }
+          _tbody.append(tr);
+        }
+      }
+      function refreshMonthData() {
+        // 获取默认日期的年月
+        var year = _viewDate.getFullYear();
+        var month = _viewDate.getMonth() + 1;
+
+        // 获取默认年月的1号是星期几
+        var week = new Date(year, month - 1, 1).getDay();
+        // 获取当前月最后一天的日期, 即可知道该月有多少天
+        var days = new Date(year, month, 0).getDate();
+        var selectday = 0;
+        if (_selectDate && _selectDate.getFullYear() == _viewDate.getFullYear() && _selectDate.getMonth() == _viewDate.getMonth()) {
+          selectday = _selectDate.getDate();
+        } else {
+          selectday = _optionData.viewAutoSelectDay;
+          if (selectday < 0) {
+            selectday = days + selectday + 1;
+          }
+        }
+        if (!_optionData.fixRowsBool || !_optionData.drawValidDay) {
+          initMonthBody((week + days) / 7);
+        }
+
+        // 遍历一遍全部单元格
+        for (var i = 0; i < _allTd.length; i++) {
+          var tdObj = _allTd[i];
+          // 在下一次存放日期前先清除对应单元格
+          tdObj.innerHTML = "";
+          var lunarObj = _self.solar2lunar(year, month, i - week + 1);
+          var tdclassAry = [];
+          tdclassAry.push("common_day");
+          if (i < week) {
+            tdclassAry.push("valid_day");
+            if (!_optionData.drawValidDay) {
+              continue;
+            }
+          } else if (i >= week + days) {
+            tdclassAry.push("valid_day");
+            if (!_optionData.drawValidDay) {
+              continue;
+            }
+          } else ;
+          if (selectday > 0 && selectday == i - week + 1) {
+            _selectDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
+            tdclassAry.push("select_day");
+            _self.onMonthDaySelectEvent(_selectDate);
+          }
+          var lanarStr = lunarObj.IDayCn;
+          var classStr = "";
+          if (lanarStr == "初一") {
+            lanarStr = lunarObj.IMonthCn;
+          }
+          if (lunarObj.festival) {
+            classStr = "festival_day";
+            lanarStr = lunarObj.festival.split(" ")[0];
+          }
+          if (lunarObj.lunarFestival) {
+            classStr = "lunarfestival_day";
+            lanarStr = lunarObj.lunarFestival;
+          }
+          if (lunarObj.isTerm) {
+            classStr = "solarterm_day";
+            lanarStr = lunarObj.Term;
+          }
+          lanarStr = '<div class="lanar_day ' + classStr + '">' + lanarStr + '</div>';
+          if (lunarObj.isToday) {
+            tdObj.classList.add("today_day");
+          }
+          var strAry = [];
+          var curDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
+          var tagStr = _self.onMonthDayTagTextEvent(curDate);
+          if (tagStr && tagStr != "") {
+            strAry.push('<div class="monthday_tag_num">' + tagStr + '</div>');
+          }
+          strAry.push('<div>' + lunarObj.cDay + '</div>');
+          if (!_optionData.useSimpleDayView) {
+            strAry.push(lanarStr);
+          }
+          tdObj.setAttribute("data-date", curDate.getTime());
+          tdObj.innerHTML = '<div class="' + tdclassAry.join(" ") + '">' + strAry.join("") + '</div>';
+          tdObj.style.cssText = "cursor: pointer;";
+          tdObj.onclick = function () {
+            _self.execMonthDayClick(this.getAttribute("data-date"));
+          };
+        }
+      }
+      this._init = function () {
+        if (!_viewDate) {
+          this.setViewDate(new Date());
+        }
+        initHeader();
+        initMonthUI();
+      };
+      this._init();
+    }
+    _createClass(TCalendarUI, null, [{
+      key: "createCalendarUI",
+      value: function createCalendarUI(dest, options) {
+        var obj = new TCalendarUI();
+        if (options) {
+          obj.setOptions(options);
+        }
+        if (dest) {
+          obj.view(dest);
+        }
+        return obj;
+      }
+    }]);
+    return TCalendarUI;
+  }();
+  var defaultCalendarCssStyle = "\n    /* \u5BFC\u822A\u680F\u6837\u5F0F */\n    .calendarhead {\n        height: 30px;\n        line-height: 30px;\n        text-align: right;\n        background-color: #fcfcfc;\n        padding: 0 10px;\n    }\n\n    .calendarhead span {\n        cursor: pointer;\n    }\n    .calendarhead .navLabel {\n        color: #a02525;\n    }\n\n    .calendarhead .preYear {\n        padding: 0px;\n    }\n\n    .calendarhead .nextYear {\n        padding: 0px;\n        padding-right: 20px;\n    }\n\n    .calendarhead .preMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .nextMonth {\n        padding: 0px;\n    }\n\n    .calendarhead .yearMonthTitle {\n        padding: 0px 4px;\n    }\n\n    .calendarhead .yearMonthTitleOther {\n        position: relative;\n        float: left;\n    }\n\n    .calendarhead .todayLabel {\n        position: relative;\n        float: right;\n        top: 6px;\n        right: 5px;\n        color:  #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #a02525;\n        border-radius: 100%;\n        width: 16px;\n        height: 16px;\n        line-height: 16px;\n    }\n\n    /* \u8BBE\u7F6E\u8868\u683C\u6837\u5F0F */\n    .calendarmonth {\n        background-color: #fcfcfc;\n        border: 0;\n        padding: 0;\n        margin: 0;\n        border-right: 1px solid #efefef;\n        border-bottom: 1px solid #efefef;\n        width: 100%;\n    }\n\n    .calendarmonth td {\n        /* \u7ED9\u5355\u5143\u683C\u8BBE\u7F6E\u8868\u683C\u7EBF */\n        border-left: 1px solid #efefef;\n        border-top: 1px solid #efefef;\n        text-align: center;\n        width: 14%;\n        font-size: 12px;\n    }\n\n    .calendarmonth th {\n        background-color: #E6F0FA;\n        background-color: #17a;\n        color: #fff;\n        font-size: 14px;\n        height: 35px;\n    }\n\n    .calendarmonth .valid_day {\n        background-color: gainsboro;\n        opacity: 0.4;\n        /* \u964D\u4F4E\u900F\u660E\u5EA6\uFF0C\u589E\u5F3A\u6726\u80E7\u6548\u679C */\n    }\n\n    .calendarmonth .week_day {\n        color: firebrick;\n        /* font-weight: bold; */\n    }\n\n    .calendarmonth .lanar_day {\n        color: black;\n        overflow: hidden;\n        white-space: nowrap;\n        text-overflow: ellipsis;\n    }\n\n    .calendarmonth .festival_day {\n        color: cornflowerblue;\n        font-weight: bold;\n    }\n\n    .calendarmonth .lunarfestival_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .solarterm_day {\n        color: #55e8df;\n        font-weight: bold;\n    }\n\n    .calendarmonth .today_day {\n        background-color: crimson;\n        color: #fff;\n    }\n\n    .calendarmonth .select_day {\n        border: 2px solid crimson;\n    }\n\n    .calendarmonth .common_day {\n        position: relative;\n        padding: 5px;\n    }\n\n    .calendarmonth .monthday_tag_num {\n        position:absolute;\n        float: right;\n        right: 2%;\n        top: 1px;\n        font-size: 70%;\n        color: #fff;\n        background-color: #a02525;\n        text-align: center;\n        box-shadow: 0 0 0 1px #fff;\n        min-width: 14px;\n        height: 14px;\n        line-height: 14px;\n        border-radius: 100%;\n        /* font-weight: bold; */\n        font-style: italic;\n    }\n    ";
+
+  var calendarUI = TCalendarUI.createCalendarUI();
+  calendar.UI = calendarUI;
 
   return calendar;
 

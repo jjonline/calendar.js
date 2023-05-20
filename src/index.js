@@ -18,8 +18,6 @@ import { lFestival, festival } from './constant/Festival'
 import { solarTerm, sTermInfo } from './constant/SolarTerm'
 import { nStr1, nStr2, nStr3 } from './constant/Salutation'
 
-import { TCalendarUI } from "./calendar-ui";
-
 const calendar = {
 
   /**
@@ -556,11 +554,6 @@ const calendar = {
 
     return this.solar2lunar(cY, cM, cD);
   },
-
-  /** */
-  createUI: function (dest, options) {
-      return TCalendarUI.createCalendarUI(this, dest, options);
-  }
 };
 
 export default calendar;

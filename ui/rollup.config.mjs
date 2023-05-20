@@ -7,10 +7,18 @@ export default [
     {
       file: `./ui/js/calendar-ui.js`,
       format: "iife",
-      name: 'CalendarUI',
-      exports: "auto",  //"auto" | "default"| "named"| "none"
+      name: 'Calendar',
+      exports: "default",  //"auto" | "default"| "named"| "none"
       sourcemap: true,
     },
+    
+    {
+      file: `./dist/js-calendar-converter.js`,
+      format: "iife",
+      name: 'calendar',
+      exports: "default",  //"auto" | "default"| "named"| "none"
+      sourcemap: true,
+    }
   ],
   plugins: [
     babel({
