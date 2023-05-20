@@ -5,7 +5,9 @@
   "main": "dist/js-calendar-converter.cjs",
   "module": "dist/js-calendar-converter.mjs",
   "scripts": {
-    "build": "npx rollup -c rollup.config.mjs"
+    "build": "npx rollup -c rollup.config.mjs",
+    "dev": "npx rollup -wc rollup.config.mjs",
+    "devUI": "npx rollup -wc ./ui/rollup.config.mjs"
   },
   "repository": {
     "type": "git",
