@@ -7,7 +7,8 @@
   "scripts": {
     "build": "npx rollup -c rollup.config.mjs",
     "dev": "npx rollup -wc rollup.config.mjs",
-    "devUI": "npx rollup -wc ./ui/rollup.config.mjs"
+    "devUI": "npx rollup -wc ./ui/rollup.config.mjs",
+    "buildUI": "npx rollup -c ./ui/rollup.config.mjs"
   },
   "repository": {
     "type": "git",
