@@ -1,4 +1,4 @@
-import {TCalendarWapper} from './calendar-wapper';
+import { TCalendarWapper } from './calendar-wapper';
 
 function createStyleNode(cssText) {
     var style = document.createElement("style");
@@ -19,7 +19,7 @@ function extend(obj, ext) {
     for (i = 1, l = args.length; i < l; i++) {
         ext = args[i];
         for (name in ext) {
-            if (ext.hasOwnProperty(name)) {
+            if (ext.hasOwnProperty.call(name)) {
                 value = ext[name];
                 if (typeof (value) !== 'undefined') {
                     obj[name] = value;
@@ -43,17 +43,17 @@ class TCalendarUI {
         var _yearMonthTitle;
         var _otherTitle;
         var _allTd = [];
-  
+
         var _optionData = {
-			drawValidDay: true,  /*显示不是本月的天*/
-			drawHeaderNav: true,  /*显示导航标题*/
-			drawCalendarTitle: true,  /*显示日历标题*/
-			fixRowsBool: false,    /*是否显示固定的行数,只显示当月天数时无效*/
-			autoSelectToday: false, /*是否自动选择今天*/
-			viewAutoSelectDay: 0, /*当前显示没有选择时自动选择那一天, 0为不选择, 负数为倒数第几天*/
-			enabelJsLoadStyle: true, /*是否js加载缺省样式,自定义样式文件时,该选项应为false*/
-			calendarStyle: "default", /*样式类别*/
-			useSimpleDayView: false, /*使用简单的天显示*/
+            drawValidDay: true,  /*显示不是本月的天*/
+            drawHeaderNav: true,  /*显示导航标题*/
+            drawCalendarTitle: true,  /*显示日历标题*/
+            fixRowsBool: false,    /*是否显示固定的行数,只显示当月天数时无效*/
+            autoSelectToday: false, /*是否自动选择今天*/
+            viewAutoSelectDay: 0, /*当前显示没有选择时自动选择那一天, 0为不选择, 负数为倒数第几天*/
+            enabelJsLoadStyle: true, /*是否js加载缺省样式,自定义样式文件时,该选项应为false*/
+            calendarStyle: "default", /*样式类别*/
+            useSimpleDayView: false, /*使用简单的天显示*/
         };
 
         var _calendarObj = new TCalendarWapper("");
@@ -62,13 +62,13 @@ class TCalendarUI {
         this.solar2lunar = _calendarObj.solar2lunar;
         this.lunar2solar = _calendarObj.lunar2solar;
 
-        this.getFestival = function(){
-           return _calendarObj.getFestival();
+        this.getFestival = function () {
+            return _calendarObj.getFestival();
         }
         // this.setCalendar = function(value){
         //     _calendarObj.setCalendar(value);
         // }
-        this.getCalendar = function() {
+        this.getCalendar = function () {
             return _calendarObj.getCalendar();
         }
 
@@ -105,7 +105,7 @@ class TCalendarUI {
         this.execMonthDayClick = function (millisecond) {
             // console.log(millisecond);
             var date = new Date(parseInt(millisecond));
-            if (!_selectDate || _selectDate.getTime() != date.getTime()) {
+            if (!_selectDate || _selectDate.getTime() !== date.getTime()) {
                 _selectDate = date;
                 this.refreshSwitch(date);
             }
@@ -142,22 +142,23 @@ class TCalendarUI {
         };
 
         this.setViewDate = function (value) {
-            if (arguments.length < 1) {
-            } else if (value instanceof Date) {
-                _viewDate = new Date(value.getFullYear(), value.getMonth());
-            } else {
-                if (value !== "today") {
-                    var year = _viewDate.getFullYear();
-                    var month = _viewDate.getMonth();
-                    switch (value) {
-                        case "y+": year++; break;
-                        case "y-": year--; break;
-                        case "m+": month++; break;
-                        case "m-": month--; break;
-                    }
-                    _viewDate = new Date(year, month);
+            if (value) {
+                if (value instanceof Date) {
+                    _viewDate = new Date(value.getFullYear(), value.getMonth());
                 } else {
-                    _viewDate = new Date();
+                    if (value !== "today") {
+                        var year = _viewDate.getFullYear();
+                        var month = _viewDate.getMonth();
+                        switch (value) {
+                            case "y+": year++; break;
+                            case "y-": year--; break;
+                            case "m+": month++; break;
+                            case "m-": month--; break;
+                        }
+                        _viewDate = new Date(year, month);
+                    } else {
+                        _viewDate = new Date();
+                    }
                 }
             }
         };
@@ -290,7 +291,7 @@ class TCalendarUI {
             for (var i = 0; i < headAry.length; i++) {
                 var th = document.createElement("th");
                 th.innerHTML = headAry[i];
-                if (i == 6 || i == 0) {
+                if (i === 6 || i === 0) {
                     th.classList.add("week_day");
                 }
                 tr.appendChild(th);
@@ -309,7 +310,7 @@ class TCalendarUI {
                 for (var j = 0; j < 7; j++) {
                     var td = document.createElement("td");
                     td.innerHTML = "";
-                    if (j == 6 || j == 0) {
+                    if (j === 6 || j === 0) {
                         td.classList.add("week_day");
                     }
                     _allTd.push(td);
@@ -332,7 +333,7 @@ class TCalendarUI {
 
             var selectday = 0;
 
-            if (_selectDate && (_selectDate.getFullYear() == _viewDate.getFullYear()) && (_selectDate.getMonth() == _viewDate.getMonth())) {
+            if (_selectDate && (_selectDate.getFullYear() === _viewDate.getFullYear()) && (_selectDate.getMonth() === _viewDate.getMonth())) {
                 selectday = _selectDate.getDate();
             } else {
                 selectday = _optionData.viewAutoSelectDay;
@@ -360,9 +361,8 @@ class TCalendarUI {
                 } else if (i >= week + days) {
                     tdclassAry.push("valid_day");
                     if (!_optionData.drawValidDay) { continue; }
-                } else {
                 }
-                if (selectday > 0 && selectday == i - week + 1) {
+                if (selectday > 0 && selectday === i - week + 1) {
                     _selectDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
                     tdclassAry.push("select_day");
                     _self.onMonthDaySelectEvent(_selectDate);
@@ -370,7 +370,7 @@ class TCalendarUI {
 
                 var lanarStr = lunarObj.IDayCn;
                 var classStr = "";
-                if (lanarStr == "初一") {
+                if (lanarStr === "初一") {
                     lanarStr = lunarObj.IMonthCn;
                 }
 
@@ -397,7 +397,7 @@ class TCalendarUI {
                 var strAry = [];
                 var curDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
                 var tagStr = _self.onMonthDayTagTextEvent(curDate);
-                if (tagStr && tagStr != "") {
+                if (tagStr && tagStr !== "") {
                     strAry.push('<div class="monthday_tag_num">' + tagStr + '</div>');
                 }
 
@@ -429,16 +429,16 @@ class TCalendarUI {
 
     static createCalendarUI(dest, options) {
         let obj = new TCalendarUI("");
-        
+
         if (options) {
             obj.setOptions(options);
         }
         if (dest) {
             obj.view(dest);
         }
-    
+
         return obj;
-    };
+    }
 }
 
 const defaultCalendarCssStyle =
@@ -594,5 +594,5 @@ const defaultCalendarCssStyle =
     `;
 
 
-export {TCalendarUI}; 
-    
+export { TCalendarUI };
+

@@ -173,7 +173,7 @@ var Calendar = (function () {
       return _festival;
     };
     this._add = function (dateStr, name, type, prior) {
-      if (/^(\d{1,2})-(\d{1,2})/.test(dateStr) == false) {
+      if (/^(\d{1,2})-(\d{1,2})/.test(dateStr) === false) {
         console.log("error format: ", dateStr);
         return null;
       }
@@ -287,11 +287,11 @@ var Calendar = (function () {
       var firstWeek = new Date(y, m - 1, 1).getDay();
       for (var i in _festival.week) {
         var wObj = _festival.week[i];
-        if (wObj && wObj.month == m) {
+        if (wObj && wObj.month === m) {
           var iWeek = wObj.iWeek;
           var iday = wObj.weekDay;
-          if ((firstWeek > iday ? 7 : 0) + 7 * (iWeek - 1) + iday - firstWeek == d - 1) {
-            if (wObj.flag == "*") {
+          if ((firstWeek > iday ? 7 : 0) + 7 * (iWeek - 1) + iday - firstWeek === d - 1) {
+            if (wObj.flag === "*") {
               result.unshift(wObj.name);
             } else {
               result.push(wObj.name);
@@ -306,20 +306,20 @@ var Calendar = (function () {
       }
     };
     this.getMonthWeek = function (y, m, d) {
-      var date = new Date(parseInt(y), parseInt(m) - 1, d),
-        w = date.getDay(),
-        d = date.getDate();
-      return Math.ceil((d + 6 - w) / 7);
+      var date = new Date(parseInt(y), parseInt(m) - 1, d);
+      var iw = date.getDay(),
+        id = date.getDate();
+      return Math.ceil((id + 6 - iw) / 7);
     };
     this.getYearWeek = function (y, m, d) {
       var date1 = new Date(y, parseInt(m) - 1, d),
-        date2 = new Date(y, 0, 1),
-        d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000);
-      return Math.ceil((d + (date2.getDay() + 1 - 1)) / 7);
+        date2 = new Date(y, 0, 1);
+      var id = Math.round((date1.valueOf() - date2.valueOf()) / 86400000);
+      return Math.ceil((id + (date2.getDay() + 1 - 1)) / 7);
     };
     function convertWeekFestivalStrToObj(str) {
       var obj = null;
-      var ret = /^(\d{2})(\d)(\d)([\s\*])(.+)$/.exec(str);
+      var ret = /^(\d{2})(\d)(\d)([\s*])(.+)$/.exec(str);
       if (ret) {
         obj = {
           name: ret[5],
@@ -1010,7 +1010,7 @@ var Calendar = (function () {
     for (i = 1, l = args.length; i < l; i++) {
       ext = args[i];
       for (name in ext) {
-        if (ext.hasOwnProperty(name)) {
+        if (ext.hasOwnProperty.call(name)) {
           value = ext[name];
           if (typeof value !== 'undefined') {
             obj[name] = value;
@@ -1092,7 +1092,7 @@ var Calendar = (function () {
       this.execMonthDayClick = function (millisecond) {
         // console.log(millisecond);
         var date = new Date(parseInt(millisecond));
-        if (!_selectDate || _selectDate.getTime() != date.getTime()) {
+        if (!_selectDate || _selectDate.getTime() !== date.getTime()) {
           _selectDate = date;
           this.refreshSwitch(date);
         }
@@ -1124,29 +1124,31 @@ var Calendar = (function () {
         }
       };
       this.setViewDate = function (value) {
-        if (arguments.length < 1) ; else if (value instanceof Date) {
-          _viewDate = new Date(value.getFullYear(), value.getMonth());
-        } else {
-          if (value !== "today") {
-            var year = _viewDate.getFullYear();
-            var month = _viewDate.getMonth();
-            switch (value) {
-              case "y+":
-                year++;
-                break;
-              case "y-":
-                year--;
-                break;
-              case "m+":
-                month++;
-                break;
-              case "m-":
-                month--;
-                break;
-            }
-            _viewDate = new Date(year, month);
+        if (value) {
+          if (value instanceof Date) {
+            _viewDate = new Date(value.getFullYear(), value.getMonth());
           } else {
-            _viewDate = new Date();
+            if (value !== "today") {
+              var year = _viewDate.getFullYear();
+              var month = _viewDate.getMonth();
+              switch (value) {
+                case "y+":
+                  year++;
+                  break;
+                case "y-":
+                  year--;
+                  break;
+                case "m+":
+                  month++;
+                  break;
+                case "m-":
+                  month--;
+                  break;
+              }
+              _viewDate = new Date(year, month);
+            } else {
+              _viewDate = new Date();
+            }
           }
         }
       };
@@ -1255,7 +1257,7 @@ var Calendar = (function () {
         for (var i = 0; i < headAry.length; i++) {
           var th = document.createElement("th");
           th.innerHTML = headAry[i];
-          if (i == 6 || i == 0) {
+          if (i === 6 || i === 0) {
             th.classList.add("week_day");
           }
           tr.appendChild(th);
@@ -1271,7 +1273,7 @@ var Calendar = (function () {
           for (var j = 0; j < 7; j++) {
             var td = document.createElement("td");
             td.innerHTML = "";
-            if (j == 6 || j == 0) {
+            if (j === 6 || j === 0) {
               td.classList.add("week_day");
             }
             _allTd.push(td);
@@ -1290,7 +1292,7 @@ var Calendar = (function () {
         // 获取当前月最后一天的日期, 即可知道该月有多少天
         var days = new Date(year, month, 0).getDate();
         var selectday = 0;
-        if (_selectDate && _selectDate.getFullYear() == _viewDate.getFullYear() && _selectDate.getMonth() == _viewDate.getMonth()) {
+        if (_selectDate && _selectDate.getFullYear() === _viewDate.getFullYear() && _selectDate.getMonth() === _viewDate.getMonth()) {
           selectday = _selectDate.getDate();
         } else {
           selectday = _optionData.viewAutoSelectDay;
@@ -1320,15 +1322,15 @@ var Calendar = (function () {
             if (!_optionData.drawValidDay) {
               continue;
             }
-          } else ;
-          if (selectday > 0 && selectday == i - week + 1) {
+          }
+          if (selectday > 0 && selectday === i - week + 1) {
             _selectDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
             tdclassAry.push("select_day");
             _self.onMonthDaySelectEvent(_selectDate);
           }
           var lanarStr = lunarObj.IDayCn;
           var classStr = "";
-          if (lanarStr == "初一") {
+          if (lanarStr === "初一") {
             lanarStr = lunarObj.IMonthCn;
           }
           if (lunarObj.festival) {
@@ -1350,7 +1352,7 @@ var Calendar = (function () {
           var strAry = [];
           var curDate = new Date(lunarObj.cYear, lunarObj.cMonth - 1, lunarObj.cDay);
           var tagStr = _self.onMonthDayTagTextEvent(curDate);
-          if (tagStr && tagStr != "") {
+          if (tagStr && tagStr !== "") {
             strAry.push('<div class="monthday_tag_num">' + tagStr + '</div>');
           }
           strAry.push('<div>' + lunarObj.cDay + '</div>');

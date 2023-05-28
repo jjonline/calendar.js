@@ -50,7 +50,7 @@ class TCalendarFestival {
         };
 
         this._add = function (dateStr, name, type, prior) {
-            if (/^(\d{1,2})-(\d{1,2})/.test(dateStr) == false) {
+            if (/^(\d{1,2})-(\d{1,2})/.test(dateStr) === false) {
                 console.log("error format: ", dateStr);
                 return null;
             }
@@ -167,11 +167,11 @@ class TCalendarFestival {
             var firstWeek = new Date(y, m - 1, 1).getDay();
             for (let i in _festival.week) {
                 let wObj = _festival.week[i];
-                if (wObj && wObj.month == m) {
+                if (wObj && wObj.month === m) {
                     let iWeek = wObj.iWeek;
                     let iday = wObj.weekDay;
-                    if ((((firstWeek > iday) ? 7 : 0) + 7 * (iWeek - 1) + iday - firstWeek) == d - 1) {
-                        if (wObj.flag == "*") {
+                    if ((((firstWeek > iday) ? 7 : 0) + 7 * (iWeek - 1) + iday - firstWeek) === d - 1) {
+                        if (wObj.flag === "*") {
                             result.unshift(wObj.name);
                         } else {
                             result.push(wObj.name);
@@ -187,18 +187,20 @@ class TCalendarFestival {
         };
 
         this.getMonthWeek = function (y, m, d) {
-            var date = new Date(parseInt(y), parseInt(m) - 1, d), w = date.getDay(), d = date.getDate();
-            return Math.ceil((d + 6 - w) / 7);
+            var date = new Date(parseInt(y), parseInt(m) - 1, d);
+            var iw = date.getDay(), id = date.getDate();
+            return Math.ceil((id + 6 - iw) / 7);
         };
 
         this.getYearWeek = function (y, m, d) {
-            var date1 = new Date(y, parseInt(m) - 1, d), date2 = new Date(y, 0, 1), d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000);
-            return Math.ceil((d + ((date2.getDay() + 1) - 1)) / 7);
+            var date1 = new Date(y, parseInt(m) - 1, d), date2 = new Date(y, 0, 1);
+            var id = Math.round((date1.valueOf() - date2.valueOf()) / 86400000);
+            return Math.ceil((id + ((date2.getDay() + 1) - 1)) / 7);
         };
 
         function convertWeekFestivalStrToObj(str) {
             let obj = null;
-            let ret = /^(\d{2})(\d)(\d)([\s\*])(.+)$/.exec(str);
+            let ret = /^(\d{2})(\d)(\d)([\s*])(.+)$/.exec(str);
             if (ret) {
                 obj = {
                     name: ret[5],
@@ -209,7 +211,7 @@ class TCalendarFestival {
                 };
             }
             return obj;
-        };
+        }
 
         function getNullFestiVal() {
             /*example
@@ -230,10 +232,10 @@ class TCalendarFestival {
                 lunar: {},
                 week: {}
             };
-        };
+        }
 
         loadDefaultFestival(this);
-    };
+    }
 }
 
 export {TCalendarFestival}
