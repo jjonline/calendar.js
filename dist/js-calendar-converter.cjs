@@ -161,6 +161,7 @@ var nStr3 = ["\u6B63", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03
  * @公历转农历：calendar.solar2lunar(1987,11,01); //[you can ignore params of prefix 0]
  * @农历转公历：calendar.lunar2solar(1987,09,10); //[you can ignore params of prefix 0]
  */
+
 var calendar = {
   /**
    * 农历1900-2100的润大小信息表
@@ -629,7 +630,7 @@ var calendar = {
     //bugFix 2016-9-25
     //if month is leap, _day use leapDays method
     if (isLeapMonth) {
-      _day = this.leapDays(y, m);
+      _day = this.leapDays(y);
     }
     if (y < 1900 || y > 2100 || d > _day) {
       return -1;

@@ -518,7 +518,7 @@ const calendar = {
     //bugFix 2016-9-25
     //if month is leap, _day use leapDays method
     if (isLeapMonth) {
-      _day = this.leapDays(y, m);
+      _day = this.leapDays(y);
     }
     if (y < 1900 || y > 2100 || d > _day) {
       return -1;
