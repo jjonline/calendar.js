@@ -159,6 +159,7 @@ var nStr3 = ["\u6B63", "\u4E8C", "\u4E09", "\u56DB", "\u4E94", "\u516D", "\u4E03
  * @公历转农历：calendar.solar2lunar(1987,11,01); //[you can ignore params of prefix 0]
  * @农历转公历：calendar.lunar2solar(1987,09,10); //[you can ignore params of prefix 0]
  */
+
 var calendar = {
   /**
    * 农历1900-2100的润大小信息表
@@ -344,16 +345,16 @@ var calendar = {
   },
   /**
    * 公历月、日判断所属星座
-   * @param  cMonth [description]
-   * @param  cDay [description]
    * @return Cn string
+   * @param cMonth
+   * @param cDay
    */
   toAstro: function toAstro(cMonth, cDay) {
     var s = "\u6469\u7FAF\u6C34\u74F6\u53CC\u9C7C\u767D\u7F8A\u91D1\u725B\u53CC\u5B50\u5DE8\u87F9\u72EE\u5B50\u5904\u5973\u5929\u79E4\u5929\u874E\u5C04\u624B\u6469\u7FAF";
     var arr = [20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22];
-    return s.substr(cMonth * 2 - (cDay < arr[cMonth - 1] ? 2 : 0), 2) + "\u5EA7"; //座
+    var start = cMonth * 2 - (cDay < arr[cMonth - 1] ? 2 : 0);
+    return s.slice(start, start + 2) + "\u5EA7"; //座
   },
-
   /**
    * 传入offset偏移量返回干支
    * @param offset 相对甲子的偏移量
@@ -376,8 +377,8 @@ var calendar = {
     var _table = this.sTermInfo[y - 1900];
     var _calcDay = [];
     for (var index = 0; index < _table.length; index += 5) {
-      var chunk = parseInt('0x' + _table.substr(index, 5)).toString();
-      _calcDay.push(chunk[0], chunk.substr(1, 2), chunk[3], chunk.substr(4, 2));
+      var chunk = parseInt('0x' + _table.slice(index, index + 5)).toString();
+      _calcDay.push(chunk[0], chunk.slice(1, 3), chunk[3], chunk.slice(4, 6));
     }
     return parseInt(_calcDay[n - 1]);
   },

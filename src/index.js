@@ -136,8 +136,6 @@ const calendar = {
     this.lFestival = param
   },
 
-
-
   /**
    * 返回农历y年一整年的总天数
    * @param y lunar Year
@@ -224,14 +222,15 @@ const calendar = {
 
   /**
    * 公历月、日判断所属星座
-   * @param  cMonth [description]
-   * @param  cDay [description]
    * @return Cn string
+   * @param cMonth
+   * @param cDay
    */
   toAstro: function (cMonth, cDay) {
     const s = "\u6469\u7faf\u6c34\u74f6\u53cc\u9c7c\u767d\u7f8a\u91d1\u725b\u53cc\u5b50\u5de8\u87f9\u72ee\u5b50\u5904\u5973\u5929\u79e4\u5929\u874e\u5c04\u624b\u6469\u7faf";
     const arr = [20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22];
-    return s.substr(cMonth * 2 - (cDay < arr[cMonth - 1] ? 2 : 0), 2) + "\u5ea7";//座
+    const start = cMonth * 2 - (cDay < arr[cMonth - 1] ? 2 : 0);
+    return s.slice(start, start + 2) + "\u5ea7";//座
   },
 
   /**
@@ -257,12 +256,12 @@ const calendar = {
     const _table = this.sTermInfo[y - 1900];
     const _calcDay = []
     for (let index = 0; index < _table.length; index += 5) {
-      const chunk = parseInt('0x' + _table.substr(index, 5)).toString()
+      const chunk = parseInt('0x' + _table.slice(index, index + 5)).toString()
       _calcDay.push(
         chunk[0],
-        chunk.substr(1, 2),
+        chunk.slice(1, 3),
         chunk[3],
-        chunk.substr(4, 2)
+        chunk.slice(4, 6)
       )
     }
     return parseInt(_calcDay[n - 1]);
