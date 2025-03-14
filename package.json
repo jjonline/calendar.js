@@ -28,5 +28,10 @@
     "@rollup/plugin-babel": "^6.0.3",
     "rollup": "^3.19.0",
     "rollup-plugin-filesize": "^10.0.0"
+  },
+  "volta": {
+    "node": "22.14.0",
+    "npm": "10.9.2",
+    "yarn": "1.22.22"
   }
 }
