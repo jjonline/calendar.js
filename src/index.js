@@ -1,5 +1,5 @@
 /**
- * @1900-2100区间内的公历、农历互转
+ * @1900-3000区间内的公历、农历互转
  * @charset UTF-8
  * @Author  Jea杨(JJonline@JJonline.Cn)
  * @Time    2014-7-21
@@ -21,7 +21,7 @@ import { nStr1, nStr2, nStr3 } from './constant/Salutation'
 const calendar = {
 
   /**
-   * 农历1900-2100的润大小信息表
+   * 农历1900-3000的闰大小信息表
    * @Array Of Property
    * @return Hex
    */
@@ -76,7 +76,7 @@ const calendar = {
   solarTerm,
 
   /**
-   * 1900-2100各年的24节气日期速查表
+   * 1900-3000各年的24节气日期速查表
    * @Array Of Property
    * @return 0x string For splice
    */
@@ -244,13 +244,13 @@ const calendar = {
 
   /**
    * 传入公历(!)y年获得该年第n个节气的公历日期
-   * @param y y公历年(1900-2100)
+   * @param y y公历年(1900-3000)
    * @param n n二十四节气中的第几个节气(1~24)；从n=1(小寒)算起
    * @return day Number
    * @eg:var _24 = calendar.getTerm(1987,3) ;//_24=4;意即1987年2月4日立春
    */
   getTerm: function (y, n) {
-    if (y < 1900 || y > 2100 || n < 1 || n > 24) {
+    if (y < 1900 || y > 3000 || n < 1 || n > 24) {
       return -1;
     }
     const _table = this.sTermInfo[y - 1900];
@@ -319,7 +319,7 @@ const calendar = {
 
   /**
    * 传入阳历年月日获得详细的公历、农历object信息 <=>JSON
-   * !important! 公历参数区间1900.1.31~2100.12.31
+   * !important! 公历参数区间1900.1.31~3000.12.31
    * @param yPara  solar year
    * @param mPara  solar month
    * @param dPara  solar day
@@ -331,7 +331,7 @@ const calendar = {
     let m = parseInt(mPara);
     let d = parseInt(dPara);
     //年份限定、上限
-    if (y < 1900 || y > 2100) {
+    if (y < 1900 || y > 3000) {
       return -1;// undefined转换为数字变为NaN
     }
     //公历传参最下限
@@ -457,7 +457,7 @@ const calendar = {
     // 农历节日修正：农历12月小月则29号除夕，大月则30号除夕
     // 此处取巧修正：当前为农历12月29号时增加一次判断并且把lunarFestivalDate设置为12-30以正确取得除夕
     // 天朝农历节日遇闰月过前不过后的原则，此处取农历12月天数不考虑闰月
-    // 农历润12月在本工具支持的200年区间内仅1574年出现
+    // 农历闰12月在本工具支持的200年区间内仅1574年出现
     if (month === 12 && day === 29 && this.monthDays(year, month) === 29) {
       lunarFestivalDate = '12-30';
     }
@@ -490,7 +490,7 @@ const calendar = {
 
   /**
    * 传入农历年月日以及传入的月份是否闰月获得详细的公历、农历object信息 <=>JSON
-   * !important! 参数区间1900.1.31~2100.12.1
+   * !important! 参数区间1900.1.31~3000.12.1
    * @param y  lunar year
    * @param m  lunar month
    * @param d  lunar day
@@ -509,7 +509,7 @@ const calendar = {
     if (isLeapMonth && (leapMonth !== m)) {
       return -1;
     }//传参要求计算该闰月公历 但该年得出的闰月与传参的月份并不同
-    if (y === 2100 && m === 12 && d > 1 || y === 1900 && m === 1 && d < 31) {
+    if (y === 3000 && m === 12 && d > 1 || y === 1900 && m === 1 && d < 31) {
       return -1;
     }//超出了最大极限值
     const day = this.monthDays(y, m);
@@ -519,7 +519,7 @@ const calendar = {
     if (isLeapMonth) {
       _day = this.leapDays(y, m);
     }
-    if (y < 1900 || y > 2100 || d > _day) {
+    if (y < 1900 || y > 3000 || d > _day) {
       return -1;
     }//参数合法性效验
 
